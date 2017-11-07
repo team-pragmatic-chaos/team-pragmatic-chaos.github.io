@@ -12,7 +12,7 @@ title: Timeline
       AWS Setup.
     </li>
     <li>
-      google Cloud Setup.
+      Google Cloud Setup.
     </li>
     <li>
       Jekyll Setup (Blog Purpose).
