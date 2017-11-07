@@ -100,7 +100,7 @@ title: Research
   <p>
     <a name="output"></a>
   </p>
-  <h3 id="output">Result</h3>
+  <h2 id="output">Result</h2>
   <p>"Write about Output Obtained."</p>
 
 </div>
