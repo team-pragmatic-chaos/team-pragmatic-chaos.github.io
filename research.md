@@ -36,6 +36,9 @@ title: Research
         <li>
           <a href="#teacher">Teacher Enforcement</a>
         </li>
+        <li>
+          <a href="#gan">Generative Adversarial Network</a>
+        </li>
       </ul>
     </li>
     <li>
@@ -96,6 +99,12 @@ title: Research
   </p>
   <h3 id="teacher">Teacher Enforcement</h3>
   <p>"Write about Teacher Enforcement Model."</p>
+
+  <p>
+    <a name="gan"></a>
+  </p>
+  <h3 id="gan">Generative Adversarial Network</h3>
+  <p>"Write about Generative Adversarial Network."</p>
 
   <p>
     <a name="output"></a>
