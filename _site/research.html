@@ -105,6 +105,23 @@
       <ul>
         <li>
           <a href="#vanilla">Vanilla Convolution LSTM</a>
+          <ul>
+            <li>
+              <a href="#input_vanilla">Input</a>
+            </li>
+            <li>
+              <a href="#train_vanilla">Training</a>
+            </li>
+            <li>
+              <a href="#test_vanilla">Testing</a>
+            </li>
+            <li>
+              <a href="#problem_vanilla">Problems</a>
+            </li>
+            <li>
+              <a href="#output_vanilla">Results</a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="#conv-lstm-deconv">Convolution LSTM Deconvolution</a>
@@ -196,8 +213,22 @@
     <a name="vanilla"></a>
   </p>
   <h3 id="vanilla">Vanilla Convolution LSTM</h3>
-  <p>"Write about Vanilla Convolution LSTM Model."</p>
+  <p>LSTM function as a human's understanding. A human persists previous knowledge and tries to understand future events with the help of previous ones. Similarly, Recurrent neural networks function this way. But the problem of long-term dependencies give rise to Long Short Term Memory networks or LSTMs.</p>
 
+  <p>
+    <a name="input_vanilla"></a>
+  </p>
+  <h4 id="input_vanilla">Input</h4>
+  <p>Our input <code><span class="n">X</span></code> can be described as a <strong>5</strong> dimensional numpy array:
+    <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X.shape = (4, 32, 64, 64, 3)</span></code></pre>
+    Here,
+    <code><span class="n">Batch size = 4</span></code>,
+    <code><span class="n">Number of time frames = 32 </span></code>, and
+    <code><span class="n">Height of image = 64</span></code>,
+    <code><span class="n">Width of image = 64</span></code>,
+    <code><span class="n">Number of channels = 3</span></code>.
+    </div>
+  </p>
   <p>
     <a name="conv-lstm-deconv"></a>
   </p>
