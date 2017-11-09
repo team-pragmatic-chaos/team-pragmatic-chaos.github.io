@@ -48,6 +48,23 @@ title: Research
         </li>
         <li>
           <a href="#conv-lstm-deconv">Convolution LSTM Deconvolution</a>
+          <ul>
+            <li>
+              <a href="#input_vanilla">Input</a>
+            </li>
+            <li>
+              <a href="#train_lstm">Training</a>
+            </li>
+            <li>
+              <a href="#test_lstm">Testing</a>
+            </li>
+            <li>
+              <a href="#problem_lstm">Problems</a>
+            </li>
+            <li>
+              <a href="#output_lstm">Results</a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="#teacher">Teacher Enforcement</a>
@@ -178,7 +195,7 @@ title: Research
   </p>
   <h4 id="test_vanilla">Testing</h4>
   <div class="figure">
-    <img src="/img/Conv_Lstm_Testing.png">
+    <img src="/img/Conv_LSTM_Testing.png">
     <p align="center">
       Vanilla Convolution Model Testing.
     </p>
@@ -218,7 +235,30 @@ title: Research
     <a name="conv-lstm-deconv"></a>
   </p>
   <h3 id="conv-lstm-deconv">Convolution LSTM Deconvolution</h3>
-  <p>"Write about Convolution LSTM Deconvolution Model."</p>
+  <p>We added the Convolutional and Deconvolutional layers to our existing model.</p>
+
+ 
+  <p>
+    <a name="train_lstm"></a>
+  </p>
+  <h4 id="train_lstm">Training</h4>
+  <p>We constructed 4 convolution layers before LSTM.</p>
+  <p>Convolution layer details are:</p>
+
+  <div class="figure">
+    <img src="/img/Conv_Lstm_Training.png">
+    <p align="center">
+      Vanilla Convolution Model Training.
+    </p>
+  </div>
+  <p>
+
+
+
+
+
+
+
 
   <p>
     <a name="teacher"></a>
