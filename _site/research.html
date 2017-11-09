@@ -233,11 +233,63 @@
   <p>
     <a name="train_vanilla"></a>
   </p>
-  <h4 id="train_vanilla">Traning</h4>
-  
-  <div class="wrapper">
-    <img src="https://github.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/blob/master/_img/Conv_Lstm_Training.png" />
+  <h4 id="train_vanilla">Training</h4>
+  <p>
+    We have implemented our model using the <a href="https://www.tensorflow.org/">Tensorflow</a> library.
+  </p>
+  <div class="figure">
+    <img src="/img/Conv_Lstm_Training.png" />
+    <p align="center">
+      Vanilla Convolution Model Training.
+    </p>
   </div>
+  <p>
+    As shown in the figure, <code><span class="n">I₀, I₁, ... I₃₁</span></code> are the input images to our model. The corresponding output is <code><span class="n">O₁, O₂, ... O₃₂</span></code>
+  </p>
+  <p>
+    We have used tensorflow's <a href="https://www.tensorflow.org/api_docs/python/tf/nn/l2_loss">l2 loss</a> to compute the loss for our model.
+  </p>
+
+  <p>
+    <a name="test_vanilla"></a>
+  </p>
+  <h4 id="test_vanilla">Testing</h4>
+  <div class="figure">
+    <img src="/img/Conv_Lstm_Testing.png" />
+    <p align="center">
+      Vanilla Convolution Model Testing.
+    </p>
+  </div>
+  <p>
+    If we carefully observe in the architecture of testing of our model, we can then see that the output from previous Convolution LSTM is applied to the next Convolution LSTM as an input.
+  </p>
+
+  <p>
+    <a name="problem_vanilla"></a>
+  </p>
+  <h4 id="problem_vanilla">Problems</h4>
+  <p>
+    <ul>
+      <li>
+        The smaller capacity of this model was an issue that we faced. Hence, we planned to change the model structure by adding the Convolution and Deconvolution layers above the current model.
+      </li>
+    </ul>
+  </p>
+
+  <p>
+    <a name="output_vanilla"></a>
+  </p>
+  <h4 id="output_vanilla">Results</h4>
+  <div class="figure">
+    <img src="/img/0_LSTM_CONV_MODEL.png" />
+    <p align="center">
+      Tensorboard l2 loss graph.
+    </p>
+  </div>
+  <p>
+    The figure above shows the l2 loss computed on tensorboard. Also, the terminal output attached shows the figures of the loss overtime.
+  </p>
+
 
   <p>
     <a name="conv-lstm-deconv"></a>
