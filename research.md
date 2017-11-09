@@ -152,6 +152,16 @@ title: Research
     <code><span class="n">Number of channels = 3</span></code>.
     </div>
   </p>
+
+  <p>
+    <a name="train_vanilla"></a>
+  </p>
+  <h4 id="train_vanilla">Traning</h4>
+  
+  <div class="wrapper">
+    <img src="https://github.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/blob/master/_img/Conv_Lstm_Training.png"/>
+  </div>
+
   <p>
     <a name="conv-lstm-deconv"></a>
   </p>
