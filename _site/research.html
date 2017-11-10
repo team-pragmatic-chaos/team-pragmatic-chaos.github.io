@@ -104,6 +104,41 @@ This above image shows the train/test loss on Tensorboard.</p>
 
 <p>The above model was not very successful in learning the features from direct input at every layer. We realized the model needed to be fed with feature maps instead of the raw input images at every layer. Therefore we decided to adopt a Conv-Deconvolution architecture to learn features of the image.</p>
 
+<h2 id="deconvolutional-lstm">Deconvolutional LSTM</h2>
+
+<h1 id="model-specifications-1">Model specifications</h1>
+
+<p>We constructed 4 Convolution layers before LSTM.</p>
+
+<p>Conv layer 1,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">32</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code>.</p>
+
+<p>Conv layer 2,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">64</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code>, <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>Conv layer 3,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">128</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code>, <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>Conv layer 4,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">256</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code>, <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>We constructed 5 Deconvolution layers after LSTM.</p>
+
+<p>Deconv layer 1,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">256</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code>.</p>
+
+<p>Deconv layer 2,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">128</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code> and <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>Deconv layer 3,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">64</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code> and <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>Deconv layer 4,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">32</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code> and <code class="highlighter-rouge">stride</code> is <code class="highlighter-rouge">2</code>.</p>
+
+<p>Deconv layer 5,
+<code class="highlighter-rouge">Number of output filters</code> is <code class="highlighter-rouge">3</code>, <code class="highlighter-rouge">kernel size</code> is <code class="highlighter-rouge">[3,3]</code> and <code class="highlighter-rouge">activation function</code> is <code class="highlighter-rouge">tanh</code>.</p>
+
 
   </div>
 

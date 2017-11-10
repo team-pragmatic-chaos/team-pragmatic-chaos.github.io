@@ -40,3 +40,44 @@ The smaller capacity of this model was an issue that we faced. Hence, we planned
 
 The above model was not very successful in learning the features from direct input at every layer. We realized the model needed to be fed with feature maps instead of the raw input images at every layer. Therefore we decided to adopt a Conv-Deconvolution architecture to learn features of the image.
 
+## Deconvolutional LSTM
+
+# Model specifications
+
+We constructed 4 Convolution layers before LSTM.
+
+Conv layer 1,
+`Number of output filters` is `32`, `kernel size` is `[3,3]`.
+
+Conv layer 2,
+`Number of output filters` is `64`, `kernel size` is `[3,3]`, `stride` is `2`.
+
+Conv layer 3,
+`Number of output filters` is `128`, `kernel size` is `[3,3]`, `stride` is `2`.
+
+Conv layer 4,
+`Number of output filters` is `256`, `kernel size` is `[3,3]`, `stride` is `2`.
+
+We constructed 5 Deconvolution layers after LSTM.
+
+Deconv layer 1,
+`Number of output filters` is `256`, `kernel size` is `[3,3]`.
+
+Deconv layer 2,
+`Number of output filters` is `128`, `kernel size` is `[3,3]` and `stride` is `2`.
+
+Deconv layer 3,
+`Number of output filters` is `64`, `kernel size` is `[3,3]` and `stride` is `2`.
+
+Deconv layer 4,
+`Number of output filters` is `32`, `kernel size` is `[3,3]` and `stride` is `2`.
+
+Deconv layer 5,
+`Number of output filters` is `3`, `kernel size` is `[3,3]` and `activation function` is `tanh`.
+
+
+
+
+
+
+
