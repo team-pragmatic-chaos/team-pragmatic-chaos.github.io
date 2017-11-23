@@ -247,20 +247,20 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ### Graphs
 
 ### Results
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_UnevenBars_g02_c04_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_UnevenBars_g02_c04_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TaiChi_g15_c01_expected_large.gif)
