@@ -187,14 +187,14 @@ For testing, we again use a batch size of 16 videos with 4 frames each as input 
 
 
 
-### Problems
+### Problems 
 
-Seq2Seq model is not able to capture motion very well. Overall image becomes blur and specially become more blur where motion happens. Another major problem is this model can not be scaled for large images as it is has Conv-LSTM cells in middle of Conv and DeConv layer. Conv-LSTM cells has fixed memory and we cannot run larger sized images at test time.
+Seq2Seq model is not able to capture motion very well. Overall image becomes blur and specially become more blur where motion happens. Another major problem is this model can not be scaled for large images as it is has Conv-LSTM cells in middle of Conv and DeConv layer. Conv-LSTM cells has fixed memory and we cannot run larger sized images at test time. 
 
 ### Pretrained Weights
 
 
-<br>
+<br> 
 
 ## Autoencoder Model
 
@@ -211,163 +211,164 @@ The encoder portion of the autoencoder takes an input video frame and uses a fea
 ![skip_autoencoder](img/skip_autoencoder/graphs/skip_autoencoder.png)
 
 ### Results
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Swing_g13_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Swing_g13_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_MilitaryParade_g20_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_MilitaryParade_g20_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingSpeedBag_g10_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingSpeedBag_g10_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_RockClimbingIndoor_g05_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_RockClimbingIndoor_g05_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TaiChi_g15_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TaiChi_g15_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingPiano_g19_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingPiano_g19_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BalanceBeam_g10_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BalanceBeam_g10_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FloorGymnastics_g05_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FloorGymnastics_g05_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_RopeClimbing_g20_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_RopeClimbing_g20_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PoleVault_g24_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PoleVault_g24_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_UnevenBars_g02_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_UnevenBars_g02_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JumpingJack_g01_c07_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JumpingJack_g01_c07_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketBowling_g20_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketBowling_g20_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PushUps_g11_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PushUps_g11_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Hammering_g22_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Hammering_g22_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HorseRace_g07_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HorseRace_g07_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TableTennisShot_g12_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TableTennisShot_g12_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_GolfSwing_g20_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_GolfSwing_g20_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CleanAndJerk_g01_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CleanAndJerk_g01_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Lunges_g09_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Lunges_g09_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FrontCrawl_g22_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FrontCrawl_g22_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingDaf_g10_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingDaf_g10_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PizzaTossing_g22_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PizzaTossing_g22_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Skijet_g05_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Skijet_g05_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingDhol_g04_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingDhol_g04_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BaseballPitch_g03_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BaseballPitch_g03_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TrampolineJumping_g19_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_TrampolineJumping_g19_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_VolleyballSpiking_g03_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_VolleyballSpiking_g03_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HighJump_g01_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HighJump_g01_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingPunchingBag_g12_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingPunchingBag_g12_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HammerThrow_g21_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HammerThrow_g21_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingGuitar_g25_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingGuitar_g25_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_ParallelBars_g09_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_ParallelBars_g09_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_WallPushups_g11_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_WallPushups_g11_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CliffDiving_g04_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CliffDiving_g04_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BasketballDunk_g25_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BasketballDunk_g25_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingTabla_g16_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingTabla_g16_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Rafting_g13_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Rafting_g13_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PullUps_g11_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PullUps_g11_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Fencing_g17_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Fencing_g17_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketBowling_g11_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketBowling_g11_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Rowing_g02_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Rowing_g02_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Surfing_g17_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Surfing_g17_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HulaHoop_g04_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HulaHoop_g04_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BandMarching_g05_c07_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BandMarching_g05_c07_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SoccerJuggling_g07_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SoccerJuggling_g07_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingSitar_g21_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingSitar_g21_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingFlute_g19_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingFlute_g19_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BasketballDunk_g12_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BasketballDunk_g12_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SoccerPenalty_g10_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SoccerPenalty_g10_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingPunchingBag_g19_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BoxingPunchingBag_g19_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_IceDancing_g16_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_IceDancing_g16_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Skiing_g23_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Skiing_g23_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Nunchucks_g15_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Nunchucks_g15_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JumpRope_g23_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JumpRope_g23_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkateBoarding_g07_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkateBoarding_g07_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FieldHockeyPenalty_g22_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FieldHockeyPenalty_g22_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingViolin_g05_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingViolin_g05_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HorseRiding_g25_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_HorseRiding_g25_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Kayaking_g23_c06_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Kayaking_g23_c06_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkyDiving_g15_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkyDiving_g15_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PommelHorse_g13_c04_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PommelHorse_g13_c04_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FrisbeeCatch_g05_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_FrisbeeCatch_g05_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JavelinThrow_g09_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_JavelinThrow_g09_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_ThrowDiscus_g18_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_ThrowDiscus_g18_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Typing_g20_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Typing_g20_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketShot_g06_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_CricketShot_g06_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Drumming_g16_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_Drumming_g16_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_StillRings_g21_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_StillRings_g21_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingCello_g24_c05_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_PlayingCello_g24_c05_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SalsaSpin_g24_c02_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SalsaSpin_g24_c02_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SumoWrestling_g17_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SumoWrestling_g17_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkyDiving_g04_c01_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_SkyDiving_g04_c01_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BodyWeightSquats_g13_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_BodyWeightSquats_g13_c03_generated_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_MoppingFloor_g04_c03_expected_large.gif)
-![skip_autoencoder_results](img/skip_autoencoder/results/v_MoppingFloor_g04_c03_generated_large.gif)
+
+<img src="img/skip_autoencoder/results/v_Swing_g13_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Swing_g13_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_MilitaryParade_g20_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_MilitaryParade_g20_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingSpeedBag_g10_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingSpeedBag_g10_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_RockClimbingIndoor_g05_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_RockClimbingIndoor_g05_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingPiano_g19_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingPiano_g19_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BalanceBeam_g10_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BalanceBeam_g10_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FloorGymnastics_g05_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FloorGymnastics_g05_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_RopeClimbing_g20_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_RopeClimbing_g20_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PoleVault_g24_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PoleVault_g24_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_UnevenBars_g02_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_UnevenBars_g02_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JumpingJack_g01_c07_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JumpingJack_g01_c07_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketBowling_g20_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketBowling_g20_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PushUps_g11_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PushUps_g11_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Hammering_g22_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Hammering_g22_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HorseRace_g07_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HorseRace_g07_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TableTennisShot_g12_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TableTennisShot_g12_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_GolfSwing_g20_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_GolfSwing_g20_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CleanAndJerk_g01_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CleanAndJerk_g01_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Lunges_g09_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Lunges_g09_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FrontCrawl_g22_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FrontCrawl_g22_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingDaf_g10_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingDaf_g10_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PizzaTossing_g22_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PizzaTossing_g22_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Skijet_g05_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Skijet_g05_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingDhol_g04_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingDhol_g04_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BaseballPitch_g03_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BaseballPitch_g03_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TrampolineJumping_g19_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_TrampolineJumping_g19_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_VolleyballSpiking_g03_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_VolleyballSpiking_g03_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HighJump_g01_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HighJump_g01_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingPunchingBag_g12_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingPunchingBag_g12_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HammerThrow_g21_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HammerThrow_g21_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingGuitar_g25_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingGuitar_g25_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_ParallelBars_g09_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_ParallelBars_g09_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_WallPushups_g11_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_WallPushups_g11_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CliffDiving_g04_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CliffDiving_g04_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BasketballDunk_g25_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BasketballDunk_g25_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingTabla_g16_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingTabla_g16_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Rafting_g13_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Rafting_g13_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PullUps_g11_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PullUps_g11_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Fencing_g17_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Fencing_g17_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketBowling_g11_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketBowling_g11_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Rowing_g02_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Rowing_g02_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Surfing_g17_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Surfing_g17_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HulaHoop_g04_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HulaHoop_g04_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BandMarching_g05_c07_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BandMarching_g05_c07_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SoccerJuggling_g07_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SoccerJuggling_g07_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingSitar_g21_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingSitar_g21_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingFlute_g19_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingFlute_g19_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BasketballDunk_g12_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BasketballDunk_g12_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SoccerPenalty_g10_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SoccerPenalty_g10_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingPunchingBag_g19_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BoxingPunchingBag_g19_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_IceDancing_g16_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_IceDancing_g16_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Skiing_g23_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Skiing_g23_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Nunchucks_g15_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Nunchucks_g15_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JumpRope_g23_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JumpRope_g23_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkateBoarding_g07_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkateBoarding_g07_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FieldHockeyPenalty_g22_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FieldHockeyPenalty_g22_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingViolin_g05_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingViolin_g05_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HorseRiding_g25_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_HorseRiding_g25_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Kayaking_g23_c06_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Kayaking_g23_c06_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkyDiving_g15_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkyDiving_g15_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PommelHorse_g13_c04_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PommelHorse_g13_c04_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FrisbeeCatch_g05_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_FrisbeeCatch_g05_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JavelinThrow_g09_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_JavelinThrow_g09_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_ThrowDiscus_g18_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_ThrowDiscus_g18_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Typing_g20_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Typing_g20_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketShot_g06_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_CricketShot_g06_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Drumming_g16_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_Drumming_g16_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_StillRings_g21_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_StillRings_g21_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingCello_g24_c05_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_PlayingCello_g24_c05_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SalsaSpin_g24_c02_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SalsaSpin_g24_c02_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SumoWrestling_g17_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SumoWrestling_g17_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkyDiving_g04_c01_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_SkyDiving_g04_c01_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BodyWeightSquats_g13_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_BodyWeightSquats_g13_c03_generated_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_MoppingFloor_g04_c03_expected_large.gif" width="210">
+<img src="img/skip_autoencoder/results/v_MoppingFloor_g04_c03_generated_large.gif" width="210">
 
 
-### Problems
+### Problems 
 
 ### Pretrained Weights
 
@@ -382,7 +383,7 @@ The encoder portion of the autoencoder takes an input video frame and uses a fea
 ### Architecture
 Multi scale architecture model is based on idea of predicating small resolution image and resoluting the predicated image as model goes deeper. This model predicts one image at a time as opposed to seq2seq model where in one shot 4-8 images are predicated by LSTM. Multi-Scale model expects input in different form, so we will begin our discussion by describing input requirements.  
 
-For sake of example, lets say we have given 4 frames and we are trying to predict next 4 frames, i.e. images are given from `t0-t3` (each having `H,W` as heigth and width, in our case `64x64`) and model is trying predict `t4-t7`. Here we have 4 images and each has channel `RGB` (3 channels). In seq2seq model we feed this images one by one as we loop through LSTM cells, here instead we will feed all `4` images in one shot. Now question comes to your mind how we will do this? Pile up all `4` images on top of each other like we do with playing cards or plates on stack/shelf. If we have 4 images with 3 channels each, you can think of them having 1 image of 12 channels i.e. `4 images x 3 channels = 12`. Lets call this new image as `I0`. Please note that `I` image will have same `H,W` as the original image.
+For sake of example, lets say we have given 4 frames and we are trying to predict next 4 frames, i.e. images are given from `t0-t3` (each having `H,W` as heigth and width, in our case `64x64`) and model is trying predict `t4-t7`. Here we have 4 images and each has channel `RGB` (3 channels). In seq2seq model we feed this images one by one as we loop through LSTM cells, here instead we will feed all `4` images in one shot. Now question comes to your mind how we will do this? Pile up all `4` images on top of each other like we do with playing cards or plates on stack/shelf. If we have 4 images with 3 channels each, you can think of them having 1 image of 12 channels i.e. `4 images x 3 channels = 12`. Lets call this new image as `I0`. Please note that `I` image will have same `H,W` as the original image. 
 
 ![MultiScale_Input](img/multi_scale_GAN/graphs/Multi_scale_GAN.gif)
 
@@ -407,22 +408,28 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ### Graphs
 
 ### Results
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Swing_g13_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Swing_g13_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_RockClimbingIndoor_g05_c02_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_RockClimbingIndoor_g05_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingPiano_g19_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingPiano_g19_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_YoYo_g05_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_YoYo_g05_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FloorGymnastics_g05_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FloorGymnastics_g05_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_RopeClimbing_g20_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_RopeClimbing_g20_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PoleVault_g24_c05_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PoleVault_g24_c05_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_UnevenBars_g02_c04_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_UnevenBars_g02_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_JumpingJack_g01_c07_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_JumpingJack_g01_c07_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TaiChi_g15_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TaiChi_g15_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PushUps_g11_c01_expected_large.gif)
@@ -431,18 +438,30 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Hammering_g22_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HorseRace_g07_c05_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HorseRace_g07_c05_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PoleVault_g24_c05_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PoleVault_g24_c05_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_GolfSwing_g20_c02_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_GolfSwing_g20_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Lunges_g09_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Lunges_g09_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FrontCrawl_g22_c06_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FrontCrawl_g22_c06_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Skijet_g05_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Skijet_g05_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TrampolineJumping_g19_c05_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TrampolineJumping_g19_c05_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HighJump_g01_c05_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HighJump_g01_c05_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BoxingPunchingBag_g12_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BoxingPunchingBag_g12_c04_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HammerThrow_g21_c05_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HammerThrow_g21_c05_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingGuitar_g25_c06_expected_large.gif)
@@ -451,16 +470,36 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_ParallelBars_g09_c05_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WallPushups_g11_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WallPushups_g11_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CliffDiving_g04_c03_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CliffDiving_g04_c03_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MilitaryParade_g20_c02_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MilitaryParade_g20_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rafting_g13_c05_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rafting_g13_c05_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CricketBowling_g11_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CricketBowling_g11_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rowing_g02_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rowing_g02_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HulaHoop_g04_c04_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HulaHoop_g04_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BandMarching_g05_c07_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BandMarching_g05_c07_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingFlute_g19_c05_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingFlute_g19_c05_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BoxingPunchingBag_g19_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BoxingPunchingBag_g19_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_IceDancing_g16_c06_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_IceDancing_g16_c06_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Skiing_g23_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Skiing_g23_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Nunchucks_g15_c04_expected_large.gif)
@@ -475,6 +514,8 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingViolin_g05_c03_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HorseRiding_g25_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HorseRiding_g25_c03_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Kayaking_g23_c06_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Kayaking_g23_c06_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PommelHorse_g13_c04_expected_large.gif)
@@ -483,33 +524,30 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_JavelinThrow_g09_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_ThrowDiscus_g18_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_ThrowDiscus_g18_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Typing_g20_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Typing_g20_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CricketShot_g06_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_CricketShot_g06_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Surfing_g17_c06_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Surfing_g17_c06_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_StillRings_g21_c01_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_StillRings_g21_c01_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_GolfSwing_g20_c02_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_GolfSwing_g20_c02_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingCello_g24_c05_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_PlayingCello_g24_c05_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rowing_g02_c04_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Rowing_g02_c04_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HulaHoop_g04_c04_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_HulaHoop_g04_c04_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BandMarching_g05_c07_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BandMarching_g05_c07_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Typing_g20_c01_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_Typing_g20_c01_generated_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_YoYo_g05_c01_expected_large.gif)
-![multi_scale_gan8_results](img/multi_scale_GAN/results/v_YoYo_g05_c01_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SkyDiving_g04_c01_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SkyDiving_g04_c01_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif)
+![multi_scale_gan8_results](img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif)
 
 ### Evaluation
 
-### Problems
+### Problems 
 
 ### Pretrained Weights
+
