@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Video Frame Predication
+title: Bringing Photos to Life using Deep Learning
 date:   2017-11-22 05:24:39 +0000
 ---
 
