@@ -338,9 +338,13 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 
 ### Model twicks
 
-
+We tried multi scale setting without GAN model, i.e. we tried to optimize loss solely based on generator part of GAN. In other case we tried to predict 4 and 8 time frame preications. We also tried L2 loss but results are getting blur if we just use L2 loss (without GDL loss) optimization as it goes toward predication of mean. 
 
 ### Training and Testing
+
+At training time we feed 4 images `T0-T3`, each having 4 different resolutions like `4x4`, `16x16`, `32x32` and `64x64`. In total we feed 4 (`T0-T3`) x 4 (different resolutions) = 16 frames. We expect `T4` predication in 4 different above mentioned resolution. We trained this setting for several video at different starting times. 
+
+At testing time (same as skip autoencoder) we feed 4 images and predict one frame. For next frame we remove oldest frame `T0` and add new predicated frame `T4` to feed to graph.
 
 ### Graphs
 
@@ -461,8 +465,16 @@ Now lets make this architecture more exiciting by introducing **Generative Adver
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif)
 
-### Evaluation
+### Advantages
+
+Multi Scale model is pretty well in captioning motion and predicating next frames. This model also fully based on convolution and therefore works with any shape of images at run time. Due to trained on GAN settings this model predict next frames which looks closer to real images. 
 
 ### Problems
 
+This model fails for video contains much more notion and this can be come because UCF-101 dataset videos has less movement. This model try to predict pixels from scratch which cause blurness for longer sequences.
+
 ### Pretrained Weights
+
+## Evaluation
+
+We evalualted models on 5 different criteria as follows Sharpness, Peak Signal to Noise Ratio (PSNR), L2, GDL and Total loss. Sharpness of image is tells about how results blur vs sharper edges on images. PSNR indicates about good image reconstruction is happening. L2 loss takes pixel wise square loss to check how far predication is from actual image. GDL loss calculates difference with surrondings pixel to focus on local changes rather than global changes. Total loss is addition of L2, GDL loss. Total loss also contains sum of discriminator loss in case of GAN models.
