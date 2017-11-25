@@ -330,39 +330,42 @@ This model becomes blur more quickly. Steady background doesn't get blur as comp
 ## Multi-Scale Model
 
 ### Architecture
-Multi scale architecture model is based on idea of predicating small resolution image and resoluting the predicated image as model goes deeper. This model predicts one image at a time as opposed to seq2seq model where in one shot 4-8 images are predicated by LSTM. Multi-Scale model expects input in different form, so we will begin our discussion by describing input requirements.  
+Multi-scale architecture model is based on idea of predicting small resolution image and resolving the predicted image as model goes deeper. This model predicts one image at a time as opposed to the seq2seq model which predicts 4-8 images simultaneously. We now discuss the input requirements as multi-scale model expects the same input in different sizes.  
 
-For sake of example, lets say we have given 4 frames and we are trying to predict next 4 frames, i.e. images are given from `t0-t3` (each having `H,W` as heigth and width, in our case `64x64`) and model is trying predict `t4-t7`. Here we have 4 images and each has channel `RGB` (3 channels). In seq2seq model we feed this images one by one as we loop through LSTM cells, here instead we will feed all `4` images in one shot. Now question comes to your mind how we will do this? Pile up all `4` images on top of each other like we do with playing cards or plates on stack/shelf. If we have 4 images with 3 channels each, you can think of them having 1 image of 12 channels i.e. `4 images x 3 channels = 12`. Lets call this new image as `I0`. Please note that `I` image will have same `H,W` as the original image.
+For example, given input images from `T0-T3` (each having `H,W` as height and width, in our case `64x64`) the model would try to predict `T4-T7`. Here we have 4 images with 3 channels each. As opposed to a seq2seq model where we feed images one by one as we loop through LSTM cells, here we feed all `4` images in one shot. So how can we achieve this?
+
+Pile up all `4` images on top of each other like we do with playing cards or plates on a shelf. If we have 4 images with 3 channels each, we can think of this as 1 image having 12 channels i.e. `4 images x 3 channels = 12`. Let's call this new image as `I`. Please note that `I` will have the same `H,W` as the original image.
 
 ![MultiScale_Input](img/multi_scale_GAN/graphs/Multi_scale_GAN.gif)
 
-In clothing as we see in shopping mall, same shirt has different sizes like xsmall (`XS`), small (`S`), medium (`M`), large (`L`), etc. We will do same with our image. Lets create 4 different shapes of same image. Currently our `I` is `64x64x12`. Let's create different shapes as `I_XS`, `I_S`, `I_M`, `I_L` having sizes `4x4x12`, `16x16x12`, `32x32x12`, `64x64x12`.
+Just as we can have diffrent sizes for a shirt, like extra-small (XS), small (S), medium (M) and large (L), we can apply the same concept to our image. Currently, our `I` is `64x64x12`. Let's create different shapes as `I_XS`, `I_S`, `I_M`, `I_L` having sizes `4x4x12`, `16x16x12`, `32x32x12`, `64x64x12`.
 
-This model has mutiple stages, as game having multiple levels. Lets say we have 4 stages in our model (same as number of available shapes). `Stage 1` take input of `4x4x12` i.e. `I_XS` and pass through convolutional layers an gives output of shape `4x4x3` i.e. new image predication zeroth output `O_XS`.   
+This model can be represented in mutiple stages:
+Stage 1 takes input of `4x4x12` i.e. `I_XS` and passes them through convolutional layers, which produces an output of shape `4x4x3` which is the first predicted image `O_XS`.   
 
-`Stage 2` will take input from output of `Stage 1` (`O_XS`) and `I_S`. Firstly, we will reshape `Stage 1` output to shape of `I_S`. In this case predicated `O0_XS` (`4x4x3`) will be reshaped to `16x16x3` (input shape of `I_S`). Now concatenate this new reshaped input with `I_S` at channel axis. `I_S` (`16x16x12`) concatenated with `16x16x3` to form `16x16x15` (12 channels from `I_S` +3 channels from `O_XS`). Each stage input will be passed through multiple convolutional layers.  
-
+Stage 2 will take input from output of Stage 1 (`O_XS`) and `I_S`. Here `O_XS` is reshaped to shape of `I_S`. The reshaped `O_XS` is concatenated with `I_S` according to channel axis. For instance, `I_S` (`16x16x12`) is concatenated with `O_XS` (`16x16x3`) to form `16x16x15`. 
+  
 ![MultiScale_Architecture](img/multi_scale_GAN/graphs/Multi_Scale_Processing.gif)
 
-As we saw for `Stage 2` is taking scaled-up inputs from `Stage 1` and reshaped actual input. We will do same thing for `Stage 3` and `Stage 4` where we take input from previous stage output and reshaped input. (`Stage 1` doesnot take any previous input.) Final output generated at each layer will be `O_XS` (`4x4x3`),`O_S` (`16x16x3`), `O_M` (`32x32x3`) , `O_L` (`64x64x3`) respectively.
+The above process is repeated for Stages 3 and 4. Final output generated at each layer will be `O_XS` (`4x4x3`),`O_S` (`16x16x3`), `O_M` (`32x32x3`) , `O_L` (`64x64x3`) respectively.
 
-Now we will reshape expected image same as we done for input image, in this case we will have 4 different shaped expected image (`E_XS`,`E_S`,`E_M`,`E_L`). Lets out loss function is `L(.,.)`. We will calculated loss as sum of loss at each predicated layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case we are `L(.,.)` is `l2` and `GDL` loss. `L2` is pixel wise euclidean distance between predicated and actual image. `GDL` loss calculates `| |P4 - P1| - |E4 - E1| |` (as shown in below image)
+The expected image is reshaped in the same way as input image i.e we will have images (`E_XS`,`E_S`,`E_M`,`E_L`). Let's the loss function be `L(.,.)`. We  calculate loss as sum of loss at each predicted layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case `L(.,.)` is L2 and GDL loss. L2 is pixel wise euclidean distance between predicted \(P\) and expected (E) image. GDL loss calculates `||P4 - P1| - |E4 - E1||`
 
-Now lets make this architecture more exiciting by introducing **Generative Adverserial Network (GAN) to this model**. Generator of GAN model is same as model explained above. Discriminator model will be same as generator but with some additional changes. Now in Discriminator at each stage after predicating output (of shape as equal to image), we will flatten that output and connect fully connected layer in front of it. Final output will be single value showing how it is real/fake. At 4 stages we will have 4 of this value indicating at each layer how generator is doing in terms of mimicking the real next frame. Loss calculation is now sum of `l2`, `GDL` and `Discriminator loss`.  
+Now let's make this architecture more interesting by introducing **Generative Adverserial Network (GAN) to this model**. Generator of GAN model is same as the model explained above.
+In the discriminator step, the predicted output is flattened, and passed through a fully connected layer at every stage. The final output is a single value representing the magnitude of it being real or fake. At every stage this value indicates how we are doing in terms of mimicking the real next frame. Loss calculation is now sum of `l2`, `GDL` and `Discriminator loss`.  
 
-### Model twicks
+### Model tweaks
 
-We tried multi scale setting without GAN model, i.e. we tried to optimize loss solely based on generator part of GAN. In other case we tried to predict 4 and 8 time frame preications. We also tried L2 loss but results are getting blur if we just use L2 loss (without GDL loss) optimization as it goes toward predication of mean. 
+We tried multi-scale setting without GAN model, i.e. we tried to optimize loss solely based on generator part of GAN. We realized that using only L2 loss produces blurred predictions as it seems to be converging towards the input mean. 
 
 ### Training and Testing
 
-At training time we feed 4 images `T0-T3`, each having 4 different resolutions like `4x4`, `16x16`, `32x32` and `64x64`. In total we feed 4 (`T0-T3`) x 4 (different resolutions) = 16 frames. We expect `T4` predication in 4 different above mentioned resolution. We trained this setting for several video at different starting times. 
+At training time, we feed 4 frames `T0-T3`, each having 4 different resolutions - `4x4`, `16x16`, `32x32` and `64x64`. The model outputs the predicted frame (`T4`) in the above mentioned resolutions.
 
-At testing time (same as skip autoencoder) we feed 4 images and predict one frame. For next frame we remove oldest frame `T0` and add new predicated frame `T4` to feed to graph.
+At testing time (same as skip autoencoder) we feed 4 frames and predict one frame. For next time step we remove the oldest frame `T0` and add the newly predicted frame `T4` as input to the model.
 
-### Graphs
-
-Below images explain about how image at `T4` predicated over the time as model learn over iterations 
+#### Graphs
+`T4` predictions as model learns over time:
 
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/0.png)
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/1.png)
@@ -377,7 +380,7 @@ Below images explain about how image at `T4` predicated over the time as model l
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/11.png)
 
 
-### Results
+#### Results
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_generated_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif)
@@ -481,16 +484,20 @@ Below images explain about how image at `T4` predicated over the time as model l
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif)
 ![multi_scale_gan8_results](img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif)
 
-### Advantages
+### Advantages and Disadvantages
 
-Multi Scale model is pretty well in captioning motion and predicating next frames. This model also fully based on convolution and therefore works with any shape of images at run time. Due to trained on GAN settings this model predict next frames which looks closer to real images. 
+Multi-scale model does pretty well in capturing motion and predicting next frames. This model is also fully based on convolution and therefore works with any shape of images at run time. As the model is trained using GAN it predicts  frames which look similar to real images. 
 
-### Problems
-
-This model fails for video contains much more notion and this can be come because UCF-101 dataset videos has less movement. This model try to predict pixels from scratch which cause blurness for longer sequences.
+This model tries to predict pixels from scratch which causes bluriness for longer sequences.
 
 ### Pretrained Weights
 
 ## Evaluation
 
-We evalualted models on 5 different criteria as follows Sharpness, Peak Signal to Noise Ratio (PSNR), L2, GDL and Total loss. Sharpness of image is tells about how results blur vs sharper edges on images. PSNR indicates about good image reconstruction is happening. L2 loss takes pixel wise square loss to check how far predication is from actual image. GDL loss calculates difference with surrondings pixel to focus on local changes rather than global changes. Total loss is addition of L2, GDL loss. Total loss also contains sum of discriminator loss in case of GAN models.
+We evaluated the models on 5 different criteria as follows:
+- Sharpness: Edge contrast of an image.
+- Peak Signal to Noise Ratio (PSNR): Measure of quality of image reconstruction. 
+- L2: Euclidean distance between predicted and expected frame.
+- GDL: Calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+- Total loss: Sum of L2, GDL loss (Also contains discriminator loss in case of multi-scale architecture).
+ 
