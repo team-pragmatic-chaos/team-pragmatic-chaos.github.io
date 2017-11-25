@@ -67,10 +67,10 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>The goal of this project is to bring static photos to life by learning the dynamics of a given scene. We plan on
-exploring several GAN architectures and convolutional LSTM networks to generate realistic looking videos from
-a given image. This is a challenging problem considering the fact that there are multiple possibilities of how the
-dynamics of a scene may change.</p>
+    <p>Consider the problem of a self driving car. What if, the car could predict the motion of objects around it using a sequence of static image frames ? It would definitely make our lives a lot safer wouldn’t it?
+Have you ever faced a situation where you’re watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important moment your friends are going to talk about at work tomorrow?</p>
+
+<p>In this blog we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames  by learning the dynamics of a given scene. This blog post is aimed at providing a high level summary of approaches and models that worked for us along with results. If you’d like to take a look at all the things we tried, including things that didn’t work, and the challenges and pitfalls associated with every thing that goes on in a deep learning model, you can look at our struggles here[link to log page].</p>
 
 <h1 id="table-of-contents">Table of Contents</h1>
 <ul>
@@ -316,7 +316,19 @@ dynamics of a scene may change.</p>
 
 <h3 id="advantages">Advantages</h3>
 
-<p>This model able to capture motion of frames and color of steady backgound in the video.</p>
+<p>This model able to capture motion of frames and color of steady background in the video.</p>
+
+<h3 id="model-tweaks">Model tweaks</h3>
+<p>On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
+Here is a quick summary of what we tried along with the intuition behind them:</p>
+
+<ul>
+  <li>Teacher Forcing: We decided to remove teacher forcing from above model
+during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.</li>
+  <li>Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions.
+Therefore, we increased number of Conv-Deconv layers and
+introduced a Batch Normalization layer.</li>
+</ul>
 
 <h3 id="problems">Problems</h3>
 
@@ -359,6 +371,9 @@ dynamics of a scene may change.</p>
 
 <p>This model can work independent of shape of the image. This model is based fully on Convolutional layer and therefore at testing time we can feed image of different sizes compared to training time. This model also capture motion and predict more sharper images than previous model.</p>
 
+<h3 id="model-tweaks-1">Model tweaks</h3>
+<p>In the autoencoder model we tried adding symmetric skip connections as described <a href="https://arxiv.org/pdf/1606.08921.pdf">here</a>. The goal was to have a very powerful decoder with information flowing from encoder with the help of symmetric skip connections.</p>
+
 <h3 id="problems-1">Problems</h3>
 
 <p>This model becomes blur more quickly. Steady background doesn’t get blur as compared to previous model. Model blurs the part where motion happens.</p>
@@ -392,7 +407,13 @@ dynamics of a scene may change.</p>
 
 <h3 id="model-twicks">Model twicks</h3>
 
+<p>We tried multi scale setting without GAN model, i.e. we tried to optimize loss solely based on generator part of GAN. In other case we tried to predict 4 and 8 time frame preications. We also tried L2 loss but results are getting blur if we just use L2 loss (without GDL loss) optimization as it goes toward predication of mean.</p>
+
 <h3 id="training-and-testing-2">Training and Testing</h3>
+
+<p>At training time we feed 4 images <code class="highlighter-rouge">T0-T3</code>, each having 4 different resolutions like <code class="highlighter-rouge">4x4</code>, <code class="highlighter-rouge">16x16</code>, <code class="highlighter-rouge">32x32</code> and <code class="highlighter-rouge">64x64</code>. In total we feed 4 (<code class="highlighter-rouge">T0-T3</code>) x 4 (different resolutions) = 16 frames. We expect <code class="highlighter-rouge">T4</code> predication in 4 different above mentioned resolution. We trained this setting for several video at different starting times.</p>
+
+<p>At testing time (same as skip autoencoder) we feed 4 images and predict one frame. For next frame we remove oldest frame <code class="highlighter-rouge">T0</code> and add new predicated frame <code class="highlighter-rouge">T4</code> to feed to graph.</p>
 
 <h3 id="graphs-2">Graphs</h3>
 
@@ -512,11 +533,19 @@ dynamics of a scene may change.</p>
 <img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif" alt="multi_scale_gan8_results" /></p>
 
-<h3 id="evaluation">Evaluation</h3>
+<h3 id="advantages-2">Advantages</h3>
+
+<p>Multi Scale model is pretty well in captioning motion and predicating next frames. This model also fully based on convolution and therefore works with any shape of images at run time. Due to trained on GAN settings this model predict next frames which looks closer to real images.</p>
 
 <h3 id="problems-2">Problems</h3>
 
+<p>This model fails for video contains much more notion and this can be come because UCF-101 dataset videos has less movement. This model try to predict pixels from scratch which cause blurness for longer sequences.</p>
+
 <h3 id="pretrained-weights-2">Pretrained Weights</h3>
+
+<h2 id="evaluation">Evaluation</h2>
+
+<p>We evalualted models on 5 different criteria as follows Sharpness, Peak Signal to Noise Ratio (PSNR), L2, GDL and Total loss. Sharpness of image is tells about how results blur vs sharper edges on images. PSNR indicates about good image reconstruction is happening. L2 loss takes pixel wise square loss to check how far predication is from actual image. GDL loss calculates difference with surrondings pixel to focus on local changes rather than global changes. Total loss is addition of L2, GDL loss. Total loss also contains sum of discriminator loss in case of GAN models.</p>
 
   </div>
 
