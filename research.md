@@ -280,26 +280,26 @@ Seq2Seq model is not able to capture motion very well. Overall image becomes blu
 
 <br>
 
-## Autoencoder Model
+### Autoencoder Model
 
-### Architecture
-An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. Basically, it tries to copy its input to its output. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.
+#### Architecture
+An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.
 
-In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are connected together by making use of skip connections. Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.
+In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are concatenated together by making use of [skip connections](https://arxiv.org/pdf/1606.08921.pdf). Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.
 
 The encoder portion of the autoencoder takes an input video frame and uses a feature map with the configuration as `[32, 64, 128, 256, 512]` while the decoder portion of the autoencoder uses the same feature map, but in the reverse order i.e. `[512, 256, 128, 64, 32]` and finally generates the output video frame which is supposed to be the generated next video frame.
 
-### Training and Testing
+#### Training and Testing
 
-At the time of training we fed 4 frames as a input and expected next frame predication from the model. Repeated mentioned process for several videos while training.
+At the time of training, we feed 4 frames as input and the model predicts the next frame in the sequence. 
 
-At testing time we want to predict several images. In this case we will first feed `T0-T3` as input and expect to predict `T4`. For predication of `T5` we will feed `T1-T4` where `T4` comes from previous predication.   
+At testing time, we want to predict several video frames. In this case, we will first feed `T0-T3` as input and expect to predict `T4`. For prediction of `T5`, we will feed `T1-T4` where `T4` comes from previous prediction.   
 
-### Graphs
+#### Results
+#### Graphs
 ![skip_autoencoder](img/skip_autoencoder/graphs/skip_autoencoder.png)
 
-### Results
-
+#### Expected vs Generated Output
 <img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_expected_large.gif" width="210">
 <img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_generated_large.gif" width="210">
 <img src="img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_expected_large.gif" width="210">
@@ -309,18 +309,13 @@ At testing time we want to predict several images. In this case we will first fe
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif" width="210">
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif" width="210">
 
-### Advantages
+#### Advantages and Disadvantages
 
-This model can work independent of shape of the image. This model is based fully on Convolutional layer and therefore at testing time we can feed image of different sizes compared to training time. This model also capture motion and predict more sharper images than previous model.
+This model can work independent of shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.
 
-### Model tweaks
-In the autoencoder model we tried adding symmetric skip connections as described [here](https://arxiv.org/pdf/1606.08921.pdf). The goal was to have a very powerful decoder with information flowing from encoder with the help of symmetric skip connections.
+This model becomes blur more quickly. Steady background doesn't get blur as compared to previous model. Model blurs the part where the actual motion happens.  
 
-### Problems
-
-This model becomes blur more quickly. Steady background doesn't get blur as compared to previous model. Model blurs the part where motion happens.  
-
-### Pretrained Weights
+#### Pretrained Weights
 
 
 
