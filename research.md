@@ -10,6 +10,8 @@ Have you ever faced a situation where you're watching your favorite sport on TV 
 
 In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look at[link to log page].
 
+![introduction](img/introduction/introduction.gif)
+
 
 Table of Contents
 =================
@@ -284,6 +286,8 @@ Seq2Seq model is not able to capture motion very well. Overall image becomes blu
 
 #### Architecture
 An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.
+
+![autoencoder](img/skip_autoencoder/graphs/auto-encoder.gif)
 
 In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are concatenated together by making use of [skip connections](https://arxiv.org/pdf/1606.08921.pdf). Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.
 
