@@ -348,6 +348,8 @@ At testing time (same as skip autoencoder) we feed 4 images and predict one fram
 
 ### Graphs
 
+Below images explain about how image at `T4` predicated over the time as model learn over iterations 
+
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/0.png)
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/1.png)
 ![MultiScale_model_running](img/multi_scale_GAN/graphs/model_running/2.png)
