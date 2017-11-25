@@ -243,9 +243,9 @@ For testing, we again use a batch size of 16 videos with 4 frames each as input 
 
 ### Advantages
 
-This model able to capture motion of frames and color of steady background in the video. 
+This model able to capture motion of frames and color of steady background in the video.
 
-## Model tweaks
+### Model tweaks
 On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
 Here is a quick summary of what we tried along with the intuition behind them:
 
@@ -297,6 +297,9 @@ At testing time we want to predict several images. In this case we will first fe
 ### Advantages
 
 This model can work independent of shape of the image. This model is based fully on Convolutional layer and therefore at testing time we can feed image of different sizes compared to training time. This model also capture motion and predict more sharper images than previous model.
+
+### Model tweaks
+In the autoencoder model we tried adding symmetric skip connections as described [here](https://arxiv.org/pdf/1606.08921.pdf). The goal was to have a very powerful decoder with information flowing from encoder with the help of symmetric skip connections.
 
 ### Problems
 
