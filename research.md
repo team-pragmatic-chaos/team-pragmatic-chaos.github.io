@@ -3,32 +3,31 @@ layout: post
 title: Bringing Photos to Life using Deep Learning
 date:   2017-11-22 05:24:39 +0000
 ---
+The goal of this project is to bring static photos to life by learning the dynamics of a given scene. We plan on
+exploring several GAN architectures and convolutional LSTM networks to generate realistic looking videos from
+a given image. This is a challenging problem considering the fact that there are multiple possibilities of how the
+dynamics of a scene may change.
+
 
 Table of Contents
 =================
  * [Data Source](#data-source)
     * [Datasets](#datasets)
-    * [Preprocessing the input](#preprocessing-the-input)
-    * [Postprocessing the input](#postprocessing-the-input)
     * [Batch Generation](#batch-generation)
     * [Selection at an interval](#selection-at-an-interval)
  * [Sequence to Sequence Model](#sequence-to-sequence-model)
     * [Architecture](#architecture)
     * [Training and Testing](#training-and-testing)
-    * [Graphs](#graphs)
     * [Results](#results)
     * [Problems](#problems)
-    * [Pretrained Weights](#pretrained-weights)
  * [Autoencoder Model](#autoencoder-model)
     * [Architecture](#architecture-1)
     * [Training and Testing](#training-and-testing-1)
-    * [Graphs](#graphs-1)
     * [Results](#results-1)
     * [Problems](#problems-1)
-    * [Pretrained Weights](#pretrained-weights-1)
  * [Multi-Scale Model](#multi-scale-model)
     * [Architecture](#architecture-2)
-    * [Model twicks](#model-twicks)
+    * [Model tweaks](#model-twicks)
     * [Training and Testing](#training-and-testing-2)
     * [Graphs](#graphs-2)
     * [Results](#results-2)
