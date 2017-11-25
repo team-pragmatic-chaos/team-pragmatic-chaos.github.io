@@ -49,6 +49,10 @@
           <a class="page-link" href="/research.html">Bringing Photos to Life using Deep Learning</a>
           
         
+          
+          <a class="page-link" href="/timeline/">Timeline</a>
+          
+        
       </div>
     </nav>
 
@@ -67,10 +71,11 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Consider the problem of a self driving car. What if, the car could predict the motion of objects around it using a sequence of static image frames ? It would definitely make our lives a lot safer wouldn’t it?
-Have you ever faced a situation where you’re watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important moment your friends are going to talk about at work tomorrow?</p>
+    <p>Consider the problem of a self-driving car. What if, the car could predict the motion of objects around it using a sequence of image frames? It would definitely enhance its ability to apply brakes in case of an emergency and thus make our lives a lot safer.</p>
 
-<p>In this blog we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames  by learning the dynamics of a given scene. This blog post is aimed at providing a high level summary of approaches and models that worked for us along with results. If you’d like to take a look at all the things we tried, including things that didn’t work, and the challenges and pitfalls associated with every thing that goes on in a deep learning model, you can look at our struggles here[link to log page].</p>
+<p>Have you ever faced a situation where you’re watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event which could be the crux of the entire episode? You would definitely want to throw your remote and break your TV!</p>
+
+<p>In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look at[link to log page].</p>
 
 <h1 id="table-of-contents">Table of Contents</h1>
 <ul>
@@ -81,79 +86,112 @@ Have you ever faced a situation where you’re watching your favorite sport on T
       <li><a href="#selection-at-an-interval">Selection at an interval</a></li>
     </ul>
   </li>
-  <li><a href="#sequence-to-sequence-model">Sequence to Sequence Model</a>
+  <li>Models
     <ul>
-      <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#training-and-testing">Training and Testing</a></li>
-      <li><a href="#results">Results</a></li>
-      <li><a href="#problems">Problems</a></li>
-    </ul>
-  </li>
-  <li><a href="#autoencoder-model">Autoencoder Model</a>
-    <ul>
-      <li><a href="#architecture-1">Architecture</a></li>
-      <li><a href="#training-and-testing-1">Training and Testing</a></li>
-      <li><a href="#results-1">Results</a></li>
-      <li><a href="#problems-1">Problems</a></li>
-    </ul>
-  </li>
-  <li><a href="#multi-scale-model">Multi-Scale Model</a>
-    <ul>
-      <li><a href="#architecture-2">Architecture</a></li>
-      <li><a href="#model-twicks">Model tweaks</a></li>
-      <li><a href="#training-and-testing-2">Training and Testing</a></li>
-      <li><a href="#graphs-2">Graphs</a></li>
-      <li><a href="#results-2">Results</a></li>
+      <li><a href="#sequence-to-sequence-model">Sequence to Sequence Model</a>
+        <ul>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#problems">Advantages and Disadvantages</a></li>
+        </ul>
+      </li>
+      <li><a href="#autoencoder-model">Autoencoder Model</a>
+        <ul>
+          <li><a href="#architecture-1">Architecture</a></li>
+          <li><a href="#results-1">Results</a></li>
+          <li><a href="#problems-1">Advantages and Disadvantages</a></li>
+        </ul>
+      </li>
+      <li><a href="#multi-scale-model">Multi-Scale Model</a>
+        <ul>
+          <li><a href="#architecture-2">Architecture</a></li>
+          <li><a href="#results-2">Results</a></li>
+          <li><a href="#problems-2">Advantages and Disadvantages</a></li>
+        </ul>
+      </li>
       <li><a href="#evaluation">Evaluation</a></li>
-      <li><a href="#problems-2">Problems</a></li>
-      <li><a href="#pretrained-weights-2">Pretrained Weights</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="data-source">Data Source</h2>
+<h2 id="data-preparation">Data Preparation</h2>
 
 <h3 id="datasets">Datasets</h3>
 
-<p>Even before anyone can think about making a predictive model, there is a need to identify and obtain a good source of data which will be used to train and test the model. Since our project is concerned with video frames prediction, it is very obvious that the model would need a lot of videos to get something meaningful out of it so that given a frame, the model is trained well enough to predict the future frames.</p>
+<p>Since the project is concerned with video frames prediction, it is very obvious that the model would need a lot of videos to get something meaningful out of it. This is to ensure that the model is trained well enough to predict the future frames.</p>
 
-<p>We use the famous UCF-101 dataset for training the model. It is currently the largest dataset of human actions. They consist of 101 action classes and over 13k clips and 27 hours of video data. The classes describe different human actions which have been uploaded by the users containing camera motion and cluttered background.</p>
+<p>We use the famous <a href="http://crcv.ucf.edu/data/UCF101.php">UCF-101 dataset</a> for training the model. It is currently the largest dataset of human actions. It consists of 101 action classes and over 13k clips and 27 hours of video data. The classes describe different human actions which have been uploaded by the users containing camera motion and cluttered background.</p>
 
-<p>Because some of the categories in the UCF-101 dataset have very little movement, we removed such categories altogether from the dataset. This identification was done using L2 distance between consecutive frames. (Ask what to write here)</p>
+<p>Because some of the categories in the UCF-101 dataset have very little movement, we removed such categories altogether from the dataset.</p>
 
-<h3 id="preprocessing-the-input">Preprocessing the input</h3>
-<p>The model works well when the data lies within the same range and so, the pixel values for all of the video frames in each of the video are transformed to somewhere between <code class="highlighter-rouge">[-1,1]</code>. To achieve this, each of the video , say X, is preprocessed using the formula X = (X - 127.5) / 127.5 instead of providing the raw video as input.</p>
+<h4 id="preprocessing-the-input">Preprocessing the input</h4>
+<p>The model requires the pixel values for all of the video frames to be in the range <code class="highlighter-rouge">[-1,1]</code>. To achieve this, each of the video , say X, is preprocessed using the formula X = (X - 127.5) / 127.5 instead of providing the raw video as input.
+<code class="highlighter-rouge">python
+def image_processing(X):
+		X = (X - 127.5) / 127.5
+		return X
+</code></p>
 
-<h3 id="postprocessing-the-input">Postprocessing the input</h3>
-<p>Because the model uses a tanh function at the end, the output generated by the model has pixel values lying in between <code class="highlighter-rouge">[-1,1]</code>. This output undergoes postprocessing so as to generate video frames. Say, the model produces a frame X, X is postprocessed using the formula X = X * 127.5 + 127.5.</p>
+<h4 id="postprocessing-the-output">Postprocessing the output</h4>
+<p>Because the model uses a tanh function at the end, the output generated by the model has pixel values lying in between <code class="highlighter-rouge">[-1,1]</code>. This output undergoes postprocessing so as to generate video frames. Say, the model produces a video X, X is postprocessed using the formula X = X * 127.5 + 127.5.
+<code class="highlighter-rouge">python
+def image_postprocessing(X):
+		X = (X * 127.5) + 127.5
+		return X
+</code></p>
 
 <h3 id="batch-generation">Batch Generation</h3>
-<p>Each batch consists of a certain number of videos and each video consists of a certain number of frames. The starting frame for each such video in a batch is selected randomly. For example, if the batch contains 4 videos and each video contains 4 continuous frames then, say for video-1 in the batch, we first generate a random number between <code class="highlighter-rouge">[0,1,2,3,...,(N-1)-4]</code> where video-1 contains N frames and each video in the batch requires 4 continuous frames. Say we generate the number <code class="highlighter-rouge">18</code>, then the frames <code class="highlighter-rouge">18, 19, 20, 21</code> become the input for video-1 in the current batch. Similar selection logic follows for other videos in the batch.</p>
+<p>Each batch consists of a certain number of videos and each video consists of a certain number of frames. The starting frame for each such video in a batch is selected randomly.</p>
+
+<p><img src="img/frame_selection/frame_selection.png" alt="batch_gen" /></p>
+
+<p>For example, if the batch contains 4 videos and each video contains 4 continuous frames then, for video-1 in the batch, we generate a random number between <code class="highlighter-rouge">[0,1,2,3,...,(N-1)-4]</code> where video-1 contains <code class="highlighter-rouge">N</code> frames. Suppose the number <code class="highlighter-rouge">18</code> is generated, then the frames <code class="highlighter-rouge">18, 19, 20, 21</code> become the input for video-1 in the current batch.</p>
+
+<p>Similar selection logic follows for other videos in the batch.</p>
 
 <h3 id="selection-at-an-interval">Selection at an interval</h3>
-<p>While working with the way the videos were getting generated till now, it was observed that there was hardly any movement in the actual video due to which even the predicted video was very static. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames. Let’s take the same example as above. Say we generate the number <code class="highlighter-rouge">18</code> and suppose we are using an interval of <code class="highlighter-rouge">4</code> frames, then the frames <code class="highlighter-rouge">18, 22, 26, 30</code> are selected as input for video-1 in the current batch. The reasoning behing this is that taking frames at an interval will have more movement rather than continuous frames and therefore, the model will be able to capture the actual movement well and will thus generate videos with movements rather than generating a static video.</p>
+<p>After experimenting with a few videos, we observed that picking continuos frames does not capture any significant movement in the actual video. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames.</p>
 
-<h2 id="sequence-to-sequence-model">Sequence to Sequence Model</h2>
+<p><img src="img/frame_selection/frame_selection_with_intervals.png" alt="batch_gen" /></p>
 
-<h3 id="architecture">Architecture</h3>
-<p>To speak in simple terms, a sequence to sequence model takes in a sequence of inputs, looks and observes at each input element in the sequence and then tries to predict the next element of the sequence. At a high level, it contains an encoder and a decoder as its main components. The encoder part of the model converts an input sequence (such as a sequence of video frames) into a fixed representation. The decoder part of the model is then trained on both the output sequence along with the fixed representation generated by the encoder. The decoder can therefore make more intelligent predictions about future frames based on the current frame as well as using the encoded representation from the encoder.</p>
+<p>Let’s take the same example as above. Suppose we generate the number <code class="highlighter-rouge">18</code> and we are using an interval of <code class="highlighter-rouge">4</code> frames, then the frames <code class="highlighter-rouge">18, 22, 26, 30</code> are selected as input for video-1 in the current batch.</p>
 
-<p>The encoder and decoder part of the model is created by using an LSTM Convolutional cell with a Convolutional layer below it and a Deconvolutional layer above it (only for the decoder part). In the encoder part, a Covolutional layer takes a raw video frame as input and passes its representation of the frame to an LSTM Convolutional cell. This hidden state is then propogated throughout the LSTM stack. In the decoder part, the output of decoder at each timestep becomes the input to the decoder at the next time step. This input is passed through a Convolutional layer whose output is then passed to an LSTM Convolutional cell just like the encoder with the only difference that the output generated by LSTM Convolutional cell is passed through a Deconvolutional layer which generates the predicted frame. Again, this predicted frame is passed as an input to the next decoder cell.</p>
+<h2 id="models">Models</h2>
+<p>The following section presents 3 models based on LSTM and Convolution that worked the best for our task.</p>
 
-<p>The specification for each of the Convolutional and Deconvolutional layer is the same as explained previously in the Vanilla Convolutional LSTM model (Insert URL here for Vanilla Convolutional LSTM model). The model takes in 4 frames as input and tries to predict the next 4 frames in the sequence as the output.</p>
+<p>Each model takes multiple frames as an input and predicts future frames as an output. The raw images that are fed into the models are converted to feature maps using convolutional layers. The predicted frames are then obtained by performing deconvolutions on feature maps.</p>
+
+<h3 id="sequence-to-sequence-model">Sequence to Sequence Model</h3>
+
+<h4 id="architecture">Architecture</h4>
+<p>A sequence to sequence (seq2seq) model takes in a sequence of inputs (such as a sequence of video frames), observes each input element in the sequence and encodes it into some fixed representation. The model can then predict the next sequence of elements using this encoded information and previously predicted frames.</p>
 
 <p><img src="img/seq2seq/graphs/Sequence_Testing.gif" alt="Seq2Seq_Train" /></p>
 
-<h3 id="training-and-testing">Training and Testing</h3>
-<p>For training, we use a batch size of 16 videos with 4 frames each as input on the encoder side. On the decoder side, the actual next 3 frames of each of those 16 videos is passed as input while the output obtained from the decoder is used to calculate the loss and improve the model predictions.</p>
+<p>Every video frame is passed through Convolutional layers and converted to a feature map which is then fed to seq2seq model which contains Convolutional LSTM (Conv LSTM) cells. This procedure is common to both encoder and decoder in the model. In the decoder, the output generated by LSTM Convolutional cell is passed through a Deconvolutional layer which generates the predicted frame. This predicted frame is passed as an input to the next decoder cell.</p>
 
-<p>For testing, we again use a batch size of 16 videos with 4 frames each as input on the encoder side. While, on the decoder side, the output generated by the previous decoder cell is used as an input for the next decoder cell.</p>
+<p>The model takes in 4 frames as input and tries to predict the next 4 frames in the sequence as the output.</p>
 
-<h3 id="graphs">Graphs</h3>
-<p><img src="img/seq2seq/graphs/seq2seq.png" alt="Seq2Seq_Train" /></p>
+<h4 id="training-and-testing">Training and Testing</h4>
+<p>During testing, the previously predicted frames is passed as input to the decoder. In contrast, at training time, we pass the actual frames of the video as input to the decoder.</p>
 
-<h3 id="results">Results</h3>
-<p><img src="img/seq2seq/results/v_Swing_g13_c01_expected_large.gif" alt="seq2seq_results" />
+<p>In our case, we used a batch size of 16 videos with 4 frames per video. Out of these 4 frames, the first 3 frames are passed as input to the encoder while the 4th frame acts as the initial input to the decoder.</p>
+
+<h4 id="model-tweaks">Model tweaks</h4>
+<p>On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
+Here is a quick summary of what we tried along with the intuition behind them:</p>
+
+<ul>
+  <li>Teacher Forcing: We decided to remove teacher forcing from above model
+during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.</li>
+  <li>Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions. Therefore, we increased number of Conv-Deconv layers and introduced a Batch Normalization layer.</li>
+</ul>
+
+<h4 id="results">Results</h4>
+<p>#### Graphs
+<img src="img/seq2seq/graphs/seq2seq.png" alt="Seq2Seq_Train" />
+#### Expected vs Generated Output
+<img src="img/seq2seq/results/v_Swing_g13_c01_expected_large.gif" alt="seq2seq_results" />
 <img src="img/seq2seq/results/v_Swing_g13_c01_generated_large.gif" alt="seq2seq_results" />
 <img src="img/seq2seq/results/v_MilitaryParade_g20_c02_expected_large.gif" alt="seq2seq_results" />
 <img src="img/seq2seq/results/v_MilitaryParade_g20_c02_generated_large.gif" alt="seq2seq_results" />
@@ -314,50 +352,36 @@ Have you ever faced a situation where you’re watching your favorite sport on T
 <img src="img/seq2seq/results/v_MoppingFloor_g04_c03_expected_large.gif" alt="seq2seq_results" />
 <img src="img/seq2seq/results/v_MoppingFloor_g04_c03_generated_large.gif" alt="seq2seq_results" /></p>
 
-<h3 id="advantages">Advantages</h3>
+<h4 id="advantages-and-disadvantages">Advantages and Disadvantages</h4>
 
 <p>This model able to capture motion of frames and color of steady background in the video.</p>
 
-<h3 id="model-tweaks">Model tweaks</h3>
-<p>On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
-Here is a quick summary of what we tried along with the intuition behind them:</p>
-
-<ul>
-  <li>Teacher Forcing: We decided to remove teacher forcing from above model
-during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.</li>
-  <li>Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions.
-Therefore, we increased number of Conv-Deconv layers and
-introduced a Batch Normalization layer.</li>
-</ul>
-
-<h3 id="problems">Problems</h3>
-
 <p>Seq2Seq model is not able to capture motion very well. Overall image becomes blur and specially become more blur where motion happens. Another major problem is this model can not be scaled for large images as it is has Conv-LSTM cells in middle of Conv and DeConv layer. Conv-LSTM cells has fixed memory and we cannot run larger sized images at test time.</p>
 
-<h3 id="pretrained-weights">Pretrained Weights</h3>
+<h4 id="pretrained-weights">Pretrained Weights</h4>
 
 <p><br /></p>
 
-<h2 id="autoencoder-model">Autoencoder Model</h2>
+<h3 id="autoencoder-model">Autoencoder Model</h3>
 
-<h3 id="architecture-1">Architecture</h3>
-<p>An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. Basically, it tries to copy its input to its output. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.</p>
+<h4 id="architecture-1">Architecture</h4>
+<p>An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.</p>
 
-<p>In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are connected together by making use of skip connections. Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.</p>
+<p>In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are concatenated together by making use of <a href="https://arxiv.org/pdf/1606.08921.pdf">skip connections</a>. Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.</p>
 
 <p>The encoder portion of the autoencoder takes an input video frame and uses a feature map with the configuration as <code class="highlighter-rouge">[32, 64, 128, 256, 512]</code> while the decoder portion of the autoencoder uses the same feature map, but in the reverse order i.e. <code class="highlighter-rouge">[512, 256, 128, 64, 32]</code> and finally generates the output video frame which is supposed to be the generated next video frame.</p>
 
-<h3 id="training-and-testing-1">Training and Testing</h3>
+<h4 id="training-and-testing-1">Training and Testing</h4>
 
-<p>At the time of training we fed 4 frames as a input and expected next frame predication from the model. Repeated mentioned process for several videos while training.</p>
+<p>At the time of training, we feed 4 frames as input and the model predicts the next frame in the sequence.</p>
 
-<p>At testing time we want to predict several images. In this case we will first feed <code class="highlighter-rouge">T0-T3</code> as input and expect to predict <code class="highlighter-rouge">T4</code>. For predication of <code class="highlighter-rouge">T5</code> we will feed <code class="highlighter-rouge">T1-T4</code> where <code class="highlighter-rouge">T4</code> comes from previous predication.</p>
+<p>At testing time, we want to predict several video frames. In this case, we will first feed <code class="highlighter-rouge">T0-T3</code> as input and expect to predict <code class="highlighter-rouge">T4</code>. For prediction of <code class="highlighter-rouge">T5</code>, we will feed <code class="highlighter-rouge">T1-T4</code> where <code class="highlighter-rouge">T4</code> comes from previous prediction.</p>
 
-<h3 id="graphs-1">Graphs</h3>
-<p><img src="img/skip_autoencoder/graphs/skip_autoencoder.png" alt="skip_autoencoder" /></p>
+<h4 id="results-1">Results</h4>
+<p>#### Graphs
+<img src="img/skip_autoencoder/graphs/skip_autoencoder.png" alt="skip_autoencoder" /></p>
 
-<h3 id="results-1">Results</h3>
-
+<h4 id="expected-vs-generated-output">Expected vs Generated Output</h4>
 <p><img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_expected_large.gif" width="210" />
 <img src="img/skip_autoencoder/results/v_TaiChi_g15_c01_generated_large.gif" width="210" />
 <img src="img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_expected_large.gif" width="210" />
@@ -367,18 +391,13 @@ introduced a Batch Normalization layer.</li>
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif" width="210" />
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif" width="210" /></p>
 
-<h3 id="advantages-1">Advantages</h3>
+<h4 id="advantages-and-disadvantages-1">Advantages and Disadvantages</h4>
 
-<p>This model can work independent of shape of the image. This model is based fully on Convolutional layer and therefore at testing time we can feed image of different sizes compared to training time. This model also capture motion and predict more sharper images than previous model.</p>
+<p>This model can work independent of shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.</p>
 
-<h3 id="model-tweaks-1">Model tweaks</h3>
-<p>In the autoencoder model we tried adding symmetric skip connections as described <a href="https://arxiv.org/pdf/1606.08921.pdf">here</a>. The goal was to have a very powerful decoder with information flowing from encoder with the help of symmetric skip connections.</p>
+<p>This model becomes blur more quickly. Steady background doesn’t get blur as compared to previous model. Model blurs the part where the actual motion happens.</p>
 
-<h3 id="problems-1">Problems</h3>
-
-<p>This model becomes blur more quickly. Steady background doesn’t get blur as compared to previous model. Model blurs the part where motion happens.</p>
-
-<h3 id="pretrained-weights-1">Pretrained Weights</h3>
+<h4 id="pretrained-weights-1">Pretrained Weights</h4>
 
 <p><br /></p>
 
@@ -415,7 +434,7 @@ introduced a Batch Normalization layer.</li>
 
 <p>At testing time (same as skip autoencoder) we feed 4 images and predict one frame. For next frame we remove oldest frame <code class="highlighter-rouge">T0</code> and add new predicated frame <code class="highlighter-rouge">T4</code> to feed to graph.</p>
 
-<h3 id="graphs-2">Graphs</h3>
+<h3 id="graphs">Graphs</h3>
 
 <p>Below images explain about how image at <code class="highlighter-rouge">T4</code> predicated over the time as model learn over iterations</p>
 
@@ -535,11 +554,11 @@ introduced a Batch Normalization layer.</li>
 <img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif" alt="multi_scale_gan8_results" /></p>
 
-<h3 id="advantages-2">Advantages</h3>
+<h3 id="advantages">Advantages</h3>
 
 <p>Multi Scale model is pretty well in captioning motion and predicating next frames. This model also fully based on convolution and therefore works with any shape of images at run time. Due to trained on GAN settings this model predict next frames which looks closer to real images.</p>
 
-<h3 id="problems-2">Problems</h3>
+<h3 id="problems">Problems</h3>
 
 <p>This model fails for video contains much more notion and this can be come because UCF-101 dataset videos has less movement. This model try to predict pixels from scratch which cause blurness for longer sequences.</p>
 
