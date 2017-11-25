@@ -3,10 +3,11 @@ layout: post
 title: Bringing Photos to Life using Deep Learning
 date:   2017-11-22 05:24:39 +0000
 ---
-The goal of this project is to bring static photos to life by learning the dynamics of a given scene. We plan on
-exploring several GAN architectures and convolutional LSTM networks to generate realistic looking videos from
-a given image. This is a challenging problem considering the fact that there are multiple possibilities of how the
-dynamics of a scene may change.
+
+Consider the problem of a self driving car. What if, the car could predict the motion of objects around it using a sequence of static image frames ? It would definitely make our lives a lot safer wouldn't it?
+Have you ever faced a situation where you're watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important moment your friends are going to talk about at work tomorrow?
+
+In this blog we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames  by learning the dynamics of a given scene. This blog post is aimed at providing a high level summary of approaches and models that worked for us along with results. If you'd like to take a look at all the things we tried, including things that didn't work, and the challenges and pitfalls associated with every thing that goes on in a deep learning model, you can look at our struggles here[link to log page].
 
 
 Table of Contents
@@ -39,7 +40,7 @@ Table of Contents
 
 ### Datasets
 
-Even before anyone can think about making a predictive model, there is a need to identify and obtain a good source of data which will be used to train and test the model. Since our project is concerned with video frames prediction, it is very obvious that the model would need a lot of videos to get something meaningful out of it so that given a frame, the model is trained well enough to predict the future frames. 
+Even before anyone can think about making a predictive model, there is a need to identify and obtain a good source of data which will be used to train and test the model. Since our project is concerned with video frames prediction, it is very obvious that the model would need a lot of videos to get something meaningful out of it so that given a frame, the model is trained well enough to predict the future frames.
 
 We use the famous UCF-101 dataset for training the model. It is currently the largest dataset of human actions. They consist of 101 action classes and over 13k clips and 27 hours of video data. The classes describe different human actions which have been uploaded by the users containing camera motion and cluttered background.
 
