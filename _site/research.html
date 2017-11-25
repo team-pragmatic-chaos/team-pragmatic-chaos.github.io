@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Video Frame Predication</title>
+  <title>Bringing Photos to Life using Deep Learning</title>
   <meta name="description" content="Deep Videos (CSCI 599 Project)
 ">
 
@@ -46,7 +46,7 @@
           
         
           
-          <a class="page-link" href="/research.html">Video Frame Predication</a>
+          <a class="page-link" href="/research.html">Bringing Photos to Life using Deep Learning</a>
           
         
       </div>
@@ -62,12 +62,56 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Video Frame Predication</h1>
+    <h1 class="post-title" itemprop="name headline">Bringing Photos to Life using Deep Learning</h1>
     <p class="post-meta"><time datetime="2017-11-22T05:24:39+00:00" itemprop="datePublished">Nov 22, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h2 id="data-source">Data Source</h2>
+    <p>The goal of this project is to bring static photos to life by learning the dynamics of a given scene. We plan on
+exploring several GAN architectures and convolutional LSTM networks to generate realistic looking videos from
+a given image. This is a challenging problem considering the fact that there are multiple possibilities of how the
+dynamics of a scene may change.</p>
+
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+  <li><a href="#data-source">Data Source</a>
+    <ul>
+      <li><a href="#datasets">Datasets</a></li>
+      <li><a href="#batch-generation">Batch Generation</a></li>
+      <li><a href="#selection-at-an-interval">Selection at an interval</a></li>
+    </ul>
+  </li>
+  <li><a href="#sequence-to-sequence-model">Sequence to Sequence Model</a>
+    <ul>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#training-and-testing">Training and Testing</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#problems">Problems</a></li>
+    </ul>
+  </li>
+  <li><a href="#autoencoder-model">Autoencoder Model</a>
+    <ul>
+      <li><a href="#architecture-1">Architecture</a></li>
+      <li><a href="#training-and-testing-1">Training and Testing</a></li>
+      <li><a href="#results-1">Results</a></li>
+      <li><a href="#problems-1">Problems</a></li>
+    </ul>
+  </li>
+  <li><a href="#multi-scale-model">Multi-Scale Model</a>
+    <ul>
+      <li><a href="#architecture-2">Architecture</a></li>
+      <li><a href="#model-twicks">Model tweaks</a></li>
+      <li><a href="#training-and-testing-2">Training and Testing</a></li>
+      <li><a href="#graphs-2">Graphs</a></li>
+      <li><a href="#results-2">Results</a></li>
+      <li><a href="#evaluation">Evaluation</a></li>
+      <li><a href="#problems-2">Problems</a></li>
+      <li><a href="#pretrained-weights-2">Pretrained Weights</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="data-source">Data Source</h2>
 
 <h3 id="datasets">Datasets</h3>
 
@@ -270,6 +314,10 @@
 <img src="img/seq2seq/results/v_MoppingFloor_g04_c03_expected_large.gif" alt="seq2seq_results" />
 <img src="img/seq2seq/results/v_MoppingFloor_g04_c03_generated_large.gif" alt="seq2seq_results" /></p>
 
+<h3 id="advantages">Advantages</h3>
+
+<p>This model able to capture motion of frames and color of steady backgound in the video.</p>
+
 <h3 id="problems">Problems</h3>
 
 <p>Seq2Seq model is not able to capture motion very well. Overall image becomes blur and specially become more blur where motion happens. Another major problem is this model can not be scaled for large images as it is has Conv-LSTM cells in middle of Conv and DeConv layer. Conv-LSTM cells has fixed memory and we cannot run larger sized images at test time.</p>
@@ -289,6 +337,10 @@
 
 <h3 id="training-and-testing-1">Training and Testing</h3>
 
+<p>At the time of training we fed 4 frames as a input and expected next frame predication from the model. Repeated mentioned process for several videos while training.</p>
+
+<p>At testing time we want to predict several images. In this case we will first feed <code class="highlighter-rouge">T0-T3</code> as input and expect to predict <code class="highlighter-rouge">T4</code>. For predication of <code class="highlighter-rouge">T5</code> we will feed <code class="highlighter-rouge">T1-T4</code> where <code class="highlighter-rouge">T4</code> comes from previous predication.</p>
+
 <h3 id="graphs-1">Graphs</h3>
 <p><img src="img/skip_autoencoder/graphs/skip_autoencoder.png" alt="skip_autoencoder" /></p>
 
@@ -303,7 +355,13 @@
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif" width="210" />
 <img src="img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif" width="210" /></p>
 
+<h3 id="advantages-1">Advantages</h3>
+
+<p>This model can work independent of shape of the image. This model is based fully on Convolutional layer and therefore at testing time we can feed image of different sizes compared to training time. This model also capture motion and predict more sharper images than previous model.</p>
+
 <h3 id="problems-1">Problems</h3>
+
+<p>This model becomes blur more quickly. Steady background doesn’t get blur as compared to previous model. Model blurs the part where motion happens.</p>
 
 <h3 id="pretrained-weights-1">Pretrained Weights</h3>
 
@@ -338,29 +396,39 @@
 
 <h3 id="graphs-2">Graphs</h3>
 
+<p><img src="img/multi_scale_GAN/graphs/model_running/0.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/1.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/2.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/3.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/4.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/5.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/7.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/8.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/9.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/10.png" alt="MultiScale_model_running" />
+<img src="img/multi_scale_GAN/graphs/model_running/11.png" alt="MultiScale_model_running" /></p>
+
 <h3 id="results-2">Results</h3>
-<p><img src="img/multi_scale_GAN/results/v_Swing_g13_c01_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Swing_g13_c01_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_RockClimbingIndoor_g05_c02_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_RockClimbingIndoor_g05_c02_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif" alt="multi_scale_gan8_results" />
+<p><img src="img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingPiano_g19_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingPiano_g19_c04_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_YoYo_g05_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_YoYo_g05_c01_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_FloorGymnastics_g05_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_FloorGymnastics_g05_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_RopeClimbing_g20_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_RopeClimbing_g20_c04_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PoleVault_g24_c05_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PoleVault_g24_c05_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_UnevenBars_g02_c04_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_UnevenBars_g02_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_JumpingJack_g01_c07_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_JumpingJack_g01_c07_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_TaiChi_g15_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_TaiChi_g15_c01_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PushUps_g11_c01_expected_large.gif" alt="multi_scale_gan8_results" />
@@ -371,28 +439,16 @@
 <img src="img/multi_scale_GAN/results/v_HorseRace_g07_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_GolfSwing_g20_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_GolfSwing_g20_c02_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Lunges_g09_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Lunges_g09_c02_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_FrontCrawl_g22_c06_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_FrontCrawl_g22_c06_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Skijet_g05_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Skijet_g05_c01_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_TrampolineJumping_g19_c05_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_TrampolineJumping_g19_c05_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HighJump_g01_c05_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HighJump_g01_c05_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BoxingPunchingBag_g12_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BoxingPunchingBag_g12_c04_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HammerThrow_g21_c05_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HammerThrow_g21_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PlayingGuitar_g25_c06_expected_large.gif" alt="multi_scale_gan8_results" />
@@ -401,36 +457,18 @@
 <img src="img/multi_scale_GAN/results/v_ParallelBars_g09_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_WallPushups_g11_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_WallPushups_g11_c01_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_CliffDiving_g04_c03_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_CliffDiving_g04_c03_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_MilitaryParade_g20_c02_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_MilitaryParade_g20_c02_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Rafting_g13_c05_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Rafting_g13_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_CricketBowling_g11_c04_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_CricketBowling_g11_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Rowing_g02_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Rowing_g02_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_HulaHoop_g04_c04_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_HulaHoop_g04_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BandMarching_g05_c07_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BandMarching_g05_c07_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingFlute_g19_c05_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_PlayingFlute_g19_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BoxingPunchingBag_g19_c01_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BoxingPunchingBag_g19_c01_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_IceDancing_g16_c06_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_IceDancing_g16_c06_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Skiing_g23_c01_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Skiing_g23_c01_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_Nunchucks_g15_c04_expected_large.gif" alt="multi_scale_gan8_results" />
@@ -445,8 +483,6 @@
 <img src="img/multi_scale_GAN/results/v_PlayingViolin_g05_c03_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HorseRiding_g25_c03_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_HorseRiding_g25_c03_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Kayaking_g23_c06_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_Kayaking_g23_c06_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_PommelHorse_g13_c04_expected_large.gif" alt="multi_scale_gan8_results" />
@@ -467,21 +503,20 @@
 <img src="img/multi_scale_GAN/results/v_PlayingCello_g24_c05_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_expected_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_Rowing_g02_c04_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_Rowing_g02_c04_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_HulaHoop_g04_c04_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_HulaHoop_g04_c04_generated_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_BandMarching_g05_c07_expected_large.gif" alt="multi_scale_gan8_results" />
+<img src="img/multi_scale_GAN/results/v_BandMarching_g05_c07_generated_large.gif" alt="multi_scale_gan8_results" />
 <img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_SkyDiving_g04_c01_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_SkyDiving_g04_c01_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif" alt="multi_scale_gan8_results" />
-<img src="img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif" alt="multi_scale_gan8_results" /></p>
+<img src="img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif" alt="multi_scale_gan8_results" /></p>
 
 <h3 id="evaluation">Evaluation</h3>
 
 <h3 id="problems-2">Problems</h3>
 
 <h3 id="pretrained-weights-2">Pretrained Weights</h3>
-
 
   </div>
 
