@@ -60,9 +60,6 @@ Each batch consists of a certain number of videos and each video consists of a c
 While working with the way the videos were getting generated till now, it was observed that there was hardly any movement in the actual video due to which even the predicted video was very static. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames. Let's take the same example as above. Say we generate the number `18` and suppose we are using an interval of `4` frames, then the frames `18, 22, 26, 30` are selected as input for video-1 in the current batch. The reasoning behing this is that taking frames at an interval will have more movement rather than continuous frames and therefore, the model will be able to capture the actual movement well and will thus generate videos with movements rather than generating a static video.
 
 
-
-
-
 ## Sequence to Sequence Model
 
 ### Architecture
@@ -246,7 +243,18 @@ For testing, we again use a batch size of 16 videos with 4 frames each as input 
 
 ### Advantages
 
-This model able to capture motion of frames and color of steady backgound in the video. 
+This model able to capture motion of frames and color of steady background in the video. 
+
+## Model tweaks
+On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
+Here is a quick summary of what we tried along with the intuition behind them:
+
+- Teacher Forcing: We decided to remove teacher forcing from above model
+during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.
+- Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions.
+Therefore, we increased number of Conv-Deconv layers and
+introduced a Batch Normalization layer.
+
 
 ### Problems
 
@@ -268,7 +276,7 @@ The encoder portion of the autoencoder takes an input video frame and uses a fea
 
 ### Training and Testing
 
-At the time of training we fed 4 frames as a input and expected next frame predication from the model. Repeated mentioned process for several videos while training. 
+At the time of training we fed 4 frames as a input and expected next frame predication from the model. Repeated mentioned process for several videos while training.
 
 At testing time we want to predict several images. In this case we will first feed `T0-T3` as input and expect to predict `T4`. For predication of `T5` we will feed `T1-T4` where `T4` comes from previous predication.   
 
