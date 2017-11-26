@@ -20,7 +20,7 @@ permalink: /timeline/
 - Time interval generation
 - Video frame analysis (minimum and maximum frame checks)
 - Relative file path handling of input data
-- Time frame with interval selection T0, T5, ..., T32
+- Timeframe with interval selection T0, T5, ..., T32
 
 ### Challenges
 - A lot of videos did not have the FFMEG header associated with them. Reading such videos causes problems.
@@ -59,19 +59,19 @@ permalink: /timeline/
  introduced a Batch Normalization layer.
 
 ### Challenges
-- At this stage we observed a slight improvement in our results. The sharpness of the predictions improved over the previous approaches.
+- At this stage, we observed a slight improvement in our results. The sharpness of the predictions improved over the previous approaches.
 - However, the model was still not able to capture any motion between the frames. 
 - Also, trying to predict future frames from a static image was proving to be extremely difficult as there are multiple possibilities to how the dynamics of a scene may change with time.
 - A new approach and major changes in our model architecture were required at this point.
 
 ### Problems with Loss Function
 - We observe that the generated frames contain a lot of random noise as well as blurring as the number of frames increase.
-Also,the generated frames do not represent any significant motion.
+Also, the generated frames do not represent any significant motion.
 - We think this could be due to the fact that L2 loss may not be the best metric for our problem. It seems that the blurring
 of images is typical when using L2 loss as stated in [1]. 
 
 ## Gradient Discriminator Loss 
-We use the GDL loss which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+We use the GDL loss which calculates the difference with respect to surronding pixels to focus on local changes rather than global changes.
 
 ## Problems with dataset
 The dataset consists of a large number of videos where there is hardly any movement between frames. We eliminate videos in UCF-101 that have no movement.
@@ -81,11 +81,11 @@ To capture the movement between the frames we feed 4 image frames as input inste
 
 ### Problems with seq2seq
 
-- We observe that, seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. 
-- Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
+- We observe that seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the blurriness increases with motion. 
+- Another major problem is this model cannot be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
 
 ## AutoEncoder Model 
-Since we wanted a model that can work independent of shape of the frame, we tried the AutoEncoder model. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.
+Since we wanted a model that can work independent of the shape of the frame, we tried the AutoEncoder model. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts sharper frames than the previous model.
 
 ## AutoEncoder Model with Skip Connections
 Each of the video frames has some spatial information associated with itself. We introduced skip connections within our autoencoder model since they help in maintaining better spatial information.
@@ -94,13 +94,13 @@ Each of the video frames has some spatial information associated with itself. We
 The results become blur more quickly. We observed that the background doesn’t get blurred which was an improvement over the seq2seq model.
 
 ## Multi-Scale Architecture
-To overcome the bluriness problem we wanted to try a GAN based network that could work on any image shape. We decided to try the multi-scale architecture with GDL loss as it is based on GAN in order to produce frames closer to the actual output.
+To overcome the blurriness problem we wanted to try a GAN based network that could work on any image shape. We decided to try the multi-scale architecture with GDL loss as it is based on GAN in order to produce frames closer to the actual output.
  
 ### Generative Adversarial Network (8 frame prediction)
 A GAN was trained with the above architecture and we tried predicting the next 8 frames instead of 4. 
 
 ## Benchmark and Model Evaluation
-We compare the loss and the final results of all the models and found that the multi scale architecture produces the best predictions. The results were compared by manual inspection of a large sample of the test data.
+We compare the loss and the final results of all the models and found that the multi-scale architecture produces the best predictions. The results were compared by manual inspection of a large sample of the test data.
 
 ## Documentation and Presentation
 The last week was spent in documenting results and building this awesome blog.
