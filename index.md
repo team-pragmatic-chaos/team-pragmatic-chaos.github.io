@@ -20,6 +20,7 @@ Table of Contents
          * [Datasets](#datasets)
          * [Batch Generation](#batch-generation)
          * [Selection at an interval](#selection-at-an-interval)
+      * [Loss Function](#loss-function)
       * [Models](#models)
          * [Sequence to Sequence Model](#sequence-to-sequence-model)
             * [Architecture](#architecture)
@@ -81,6 +82,12 @@ After experimenting with a few videos, we observed that picking continuos frames
 ![batch_gen](img/frame_selection/frame_selection_with_intervals.png)
 
 Let's take the same example as above. Suppose we generate the number `1` and we are using an interval of `1` frame, then the frames `1, 3, 5, 7` are selected as input for video-1 in the current batch. 
+
+## Loss Function
+We use the GDL loss which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+
+<img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
+
 
 ## Models
 The following section presents 3 models based on LSTM and Convolution that worked the best for our task.
