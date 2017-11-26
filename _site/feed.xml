@@ -4,37 +4,609 @@
     <title>Team Pragmatic Chaos Blog</title>
     <description>Deep Videos (CSCI 599 Project)
 </description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 25 Nov 2017 10:45:32 +0000</pubDate>
-    <lastBuildDate>Sat, 25 Nov 2017 10:45:32 +0000</lastBuildDate>
-    <generator>Jekyll v3.0.1</generator>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 25 Nov 2017 23:48:41 -0800</pubDate>
+    <lastBuildDate>Sat, 25 Nov 2017 23:48:41 -0800</lastBuildDate>
+    <generator>Jekyll v3.6.2</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+        <title>Bringing Photos to Life using Deep Learning</title>
+        <description>&lt;p&gt;Consider the problem of a self-driving car. What if, the car could predict the motion of objects around it using a sequence of image frames? It would definitely enhance its ability to apply brakes in case of an emergency and thus make our lives a lot safer.&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;Have you ever faced a situation where you’re watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event which could be the crux of the entire episode? You would definitely want to throw your remote and break your TV!&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look at[link to log page].&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Tom&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;img src=&quot;img/introduction/introduction.gif&quot; alt=&quot;introduction&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#table-of-contents&quot;&gt;Table of Contents&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#data-preparation&quot;&gt;Data Preparation&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#datasets&quot;&gt;Datasets&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#batch-generation&quot;&gt;Batch Generation&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#selection-at-an-interval&quot;&gt;Selection at an interval&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#models&quot;&gt;Models&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#sequence-to-sequence-model&quot;&gt;Sequence to Sequence Model&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#architecture&quot;&gt;Architecture&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#results&quot;&gt;Results&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#expected-vs-generated-output&quot;&gt;Expected vs Generated Output&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#advantages-and-disadvantages&quot;&gt;Advantages and Disadvantages&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#autoencoder-model&quot;&gt;Autoencoder Model&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#architecture-1&quot;&gt;Architecture&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#results-1&quot;&gt;Results&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#expected-vs-generated-output-1&quot;&gt;Expected vs Generated Output&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#advantages-and-disadvantages-1&quot;&gt;Advantages and Disadvantages&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#multi-scale-model&quot;&gt;Multi-Scale Model&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#architecture-2&quot;&gt;Architecture&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#results-2&quot;&gt;Results&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#advantages-and-disadvantages-2&quot;&gt;Advantages and Disadvantages&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#evaluation&quot;&gt;Evaluation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#future-scope&quot;&gt;Future Scope&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#summary--conclusion&quot;&gt;Summary &amp;amp; Conclusion&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#references&quot;&gt;References&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;data-preparation&quot;&gt;Data Preparation&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;Since the project is concerned with video frames prediction, it is very obvious that the model would need a lot of videos to get something meaningful out of it. This is to ensure that the model is trained well enough to predict the future frames.&lt;/p&gt;
+
+&lt;p&gt;We use the famous &lt;a href=&quot;http://crcv.ucf.edu/data/UCF101.php&quot;&gt;UCF-101 dataset&lt;/a&gt; for training the model. It is currently the largest dataset of human actions. It consists of 101 action classes and over 13k clips and 27 hours of video data. The classes describe different human actions which have been uploaded by the users containing camera motion and cluttered background.&lt;/p&gt;
+
+&lt;p&gt;Because some of the categories in the UCF-101 dataset have very little movement, we removed such categories altogether from the dataset.&lt;/p&gt;
+
+&lt;h4 id=&quot;preprocessing-the-input&quot;&gt;Preprocessing the input&lt;/h4&gt;
+&lt;p&gt;The model requires the pixel values for all of the video frames to be in the range &lt;code class=&quot;highlighter-rouge&quot;&gt;[-1,1]&lt;/code&gt;. To achieve this, each of the video , say X, is preprocessed using the formula X = (X - 127.5) / 127.5 instead of providing the raw video as input.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;image_processing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;127.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;127.5&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;postprocessing-the-output&quot;&gt;Postprocessing the output&lt;/h4&gt;
+&lt;p&gt;Because the model uses a tanh function at the end, the output generated by the model has pixel values lying in between &lt;code class=&quot;highlighter-rouge&quot;&gt;[-1,1]&lt;/code&gt;. This output undergoes postprocessing so as to generate video frames. Say, the model produces a video X, X is postprocessed using the formula X = X * 127.5 + 127.5.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;image_postprocessing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;127.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;127.5&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;batch-generation&quot;&gt;Batch Generation&lt;/h3&gt;
+&lt;p&gt;Each batch consists of a certain number of videos and each video consists of a certain number of frames. The starting frame for each such video in a batch is selected randomly.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/frame_selection/frame_selection.png&quot; alt=&quot;batch_gen&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For example, if the batch contains 4 videos and each video contains 4 continuous frames then, for video-1 in the batch, we generate a random number between &lt;code class=&quot;highlighter-rouge&quot;&gt;[0,1,2,3,...,(N-1)-4]&lt;/code&gt; where video-1 contains &lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt; frames. Suppose the number &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt; is generated, then the frames &lt;code class=&quot;highlighter-rouge&quot;&gt;2, 3, 4, 5&lt;/code&gt; become the input for video-1 in the current batch.&lt;/p&gt;
+
+&lt;p&gt;Similar selection logic follows for other videos in the batch.&lt;/p&gt;
+
+&lt;h3 id=&quot;selection-at-an-interval&quot;&gt;Selection at an interval&lt;/h3&gt;
+&lt;p&gt;After experimenting with a few videos, we observed that picking continuos frames does not capture any significant movement in the actual video. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/frame_selection/frame_selection_with_intervals.png&quot; alt=&quot;batch_gen&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s take the same example as above. Suppose we generate the number &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt; and we are using an interval of &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt; frame, then the frames &lt;code class=&quot;highlighter-rouge&quot;&gt;1, 3, 5, 7&lt;/code&gt; are selected as input for video-1 in the current batch.&lt;/p&gt;
+
+&lt;h2 id=&quot;models&quot;&gt;Models&lt;/h2&gt;
+&lt;p&gt;The following section presents 3 models based on LSTM and Convolution that worked the best for our task.&lt;/p&gt;
+
+&lt;p&gt;Each model takes multiple frames as an input and predicts future frames as an output. The raw images that are fed into the models are converted to feature maps using convolutional layers. The predicted frames are then obtained by performing deconvolutions on feature maps.&lt;/p&gt;
+
+&lt;h3 id=&quot;sequence-to-sequence-model&quot;&gt;Sequence to Sequence Model&lt;/h3&gt;
+
+&lt;h4 id=&quot;architecture&quot;&gt;Architecture&lt;/h4&gt;
+&lt;p&gt;A sequence to sequence (seq2seq) model takes in a sequence of inputs (such as a sequence of video frames), observes each input element in the sequence and encodes it into some fixed representation. The model can then predict the next sequence of elements using this encoded information and previously predicted frames.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/seq2seq/graphs/Sequence_Testing.gif&quot; alt=&quot;Seq2Seq_Train&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Every video frame is passed through Convolutional layers and converted to a feature map which is then fed to seq2seq model which contains Convolutional LSTM (Conv LSTM) cells. This procedure is common to both encoder and decoder in the model. In the decoder, the output generated by LSTM Convolutional cell is passed through a Deconvolutional layer which generates the predicted frame. This predicted frame is passed as an input to the next decoder cell.&lt;/p&gt;
+
+&lt;p&gt;The model takes in 4 frames as input and tries to predict the next 4 frames in the sequence as the output.&lt;/p&gt;
+
+&lt;h4 id=&quot;training-and-testing&quot;&gt;Training and Testing&lt;/h4&gt;
+&lt;p&gt;During testing, the previously predicted frames is passed as input to the decoder. In contrast, at training time, we pass the actual frames of the video as input to the decoder.&lt;/p&gt;
+
+&lt;p&gt;In our case, we used a batch size of 16 videos with 4 frames per video. Out of these 4 frames, the first 3 frames are passed as input to the encoder while the 4th frame acts as the initial input to the decoder.&lt;/p&gt;
+
+&lt;h4 id=&quot;model-tweaks&quot;&gt;Model tweaks&lt;/h4&gt;
+&lt;p&gt;On top of the baseline model as described above we tried the following tweaks as an attempt to improve performance.
+Here is a quick summary of what we tried along with the intuition behind them:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Teacher Forcing: We decided to remove teacher forcing from above model
+during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.&lt;/li&gt;
+  &lt;li&gt;Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions. Therefore, we increased number of Conv-Deconv layers and introduced a Batch Normalization layer.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;results&quot;&gt;Results&lt;/h4&gt;
+&lt;h4 id=&quot;graphs&quot;&gt;Graphs&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;img/seq2seq/graphs/seq2seq.png&quot; alt=&quot;Seq2Seq_Train&quot; /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;expected-vs-generated-output&quot;&gt;Expected vs Generated Output&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;img/seq2seq/results/v_Swing_g13_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Swing_g13_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_MilitaryParade_g20_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_MilitaryParade_g20_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingSpeedBag_g10_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingSpeedBag_g10_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_RockClimbingIndoor_g05_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_RockClimbingIndoor_g05_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TaiChi_g15_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TaiChi_g15_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_WritingOnBoard_g19_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_WritingOnBoard_g19_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingPiano_g19_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingPiano_g19_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_YoYo_g05_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_YoYo_g05_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BalanceBeam_g10_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BalanceBeam_g10_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FloorGymnastics_g05_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FloorGymnastics_g05_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_RopeClimbing_g20_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_RopeClimbing_g20_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PoleVault_g24_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PoleVault_g24_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_UnevenBars_g02_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_UnevenBars_g02_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JumpingJack_g01_c07_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JumpingJack_g01_c07_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketBowling_g20_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketBowling_g20_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PushUps_g11_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PushUps_g11_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Hammering_g22_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Hammering_g22_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HorseRace_g07_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HorseRace_g07_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TableTennisShot_g12_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TableTennisShot_g12_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_GolfSwing_g20_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_GolfSwing_g20_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CleanAndJerk_g01_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CleanAndJerk_g01_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Lunges_g09_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Lunges_g09_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FrontCrawl_g22_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FrontCrawl_g22_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingDaf_g10_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingDaf_g10_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PizzaTossing_g22_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PizzaTossing_g22_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Skijet_g05_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Skijet_g05_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingDhol_g04_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingDhol_g04_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BaseballPitch_g03_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BaseballPitch_g03_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TrampolineJumping_g19_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_TrampolineJumping_g19_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_VolleyballSpiking_g03_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_VolleyballSpiking_g03_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HighJump_g01_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HighJump_g01_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingPunchingBag_g12_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingPunchingBag_g12_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HammerThrow_g21_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HammerThrow_g21_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingGuitar_g25_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingGuitar_g25_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Shotput_g18_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Shotput_g18_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_ParallelBars_g09_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_ParallelBars_g09_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_WallPushups_g11_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_WallPushups_g11_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JugglingBalls_g06_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JugglingBalls_g06_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CliffDiving_g04_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CliffDiving_g04_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BasketballDunk_g25_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BasketballDunk_g25_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingTabla_g16_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingTabla_g16_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Rafting_g13_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Rafting_g13_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PullUps_g11_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PullUps_g11_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Fencing_g17_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Fencing_g17_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketBowling_g11_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketBowling_g11_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Rowing_g02_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Rowing_g02_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Surfing_g17_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Surfing_g17_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HulaHoop_g04_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HulaHoop_g04_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BandMarching_g05_c07_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BandMarching_g05_c07_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SoccerJuggling_g07_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SoccerJuggling_g07_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingSitar_g21_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingSitar_g21_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingFlute_g19_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingFlute_g19_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BasketballDunk_g12_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BasketballDunk_g12_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SoccerPenalty_g10_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SoccerPenalty_g10_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingPunchingBag_g19_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BoxingPunchingBag_g19_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_IceDancing_g16_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_IceDancing_g16_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Skiing_g23_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Skiing_g23_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BreastStroke_g23_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BreastStroke_g23_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Nunchucks_g15_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Nunchucks_g15_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JumpRope_g23_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JumpRope_g23_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkateBoarding_g07_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkateBoarding_g07_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FieldHockeyPenalty_g22_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FieldHockeyPenalty_g22_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingViolin_g05_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingViolin_g05_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HorseRiding_g25_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_HorseRiding_g25_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Kayaking_g23_c06_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Kayaking_g23_c06_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkyDiving_g15_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkyDiving_g15_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PommelHorse_g13_c04_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PommelHorse_g13_c04_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FrisbeeCatch_g05_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_FrisbeeCatch_g05_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JavelinThrow_g09_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_JavelinThrow_g09_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_ThrowDiscus_g18_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_ThrowDiscus_g18_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Typing_g20_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Typing_g20_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketShot_g06_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_CricketShot_g06_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Drumming_g16_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_Drumming_g16_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_StillRings_g21_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_StillRings_g21_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingCello_g24_c05_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_PlayingCello_g24_c05_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SalsaSpin_g24_c02_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SalsaSpin_g24_c02_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SumoWrestling_g17_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SumoWrestling_g17_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkyDiving_g04_c01_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_SkyDiving_g04_c01_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BodyWeightSquats_g13_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_BodyWeightSquats_g13_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_MoppingFloor_g04_c03_expected_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;
+&lt;img src=&quot;img/seq2seq/results/v_MoppingFloor_g04_c03_generated_large.gif&quot; alt=&quot;seq2seq_results&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;advantages-and-disadvantages&quot;&gt;Advantages and Disadvantages&lt;/h4&gt;
+&lt;p&gt;This seq2seq model is able to capture the features of the steady background in the video very well.&lt;/p&gt;
+
+&lt;p&gt;However,  seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.&lt;/p&gt;
+
+&lt;h4 id=&quot;pretrained-weights&quot;&gt;Pretrained Weights&lt;/h4&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;autoencoder-model&quot;&gt;Autoencoder Model&lt;/h3&gt;
+
+&lt;h4 id=&quot;architecture-1&quot;&gt;Architecture&lt;/h4&gt;
+&lt;p&gt;An autoencoder model is used for unsupervised learning in which the model tries to reconstruct the input so that the generated output is as similar as possible to the given input. At a high level, there are 2 symmetrical parts to an autoencoder - an encoder part and a decoder part. The encoder part of the network takes in raw images/video frames as input and tries to generate a vector representation or an encoding for the given input. The decoder part of the network takes this encoding of the input and tries to reconstruct the output as similar as possible to the input.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/skip_autoencoder/graphs/auto-encoder.gif&quot; alt=&quot;autoencoder&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In our case, we make the decoder generate the next video frame given the current video frame instead of reconstructing the same input video frame. Also, The corresponding convolutional and deconvolutional layers are concatenated together by making use of &lt;a href=&quot;https://arxiv.org/pdf/1606.08921.pdf&quot;&gt;skip connections&lt;/a&gt;. Each of the video frames has some spatial information associated with itself. The skip connections help in maintaining better spatial information.&lt;/p&gt;
+
+&lt;p&gt;The encoder portion of the autoencoder takes an input video frame and uses a feature map with the configuration as &lt;code class=&quot;highlighter-rouge&quot;&gt;[32, 64, 128, 256, 512]&lt;/code&gt; while the decoder portion of the autoencoder uses the same feature map, but in the reverse order i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;[512, 256, 128, 64, 32]&lt;/code&gt; and finally generates the output video frame which is supposed to be the generated next video frame.&lt;/p&gt;
+
+&lt;h4 id=&quot;training-and-testing-1&quot;&gt;Training and Testing&lt;/h4&gt;
+
+&lt;p&gt;At the time of training, we feed 4 frames as input and the model predicts the next frame in the sequence.&lt;/p&gt;
+
+&lt;p&gt;At testing time, we want to predict several video frames. In this case, we will first feed &lt;code class=&quot;highlighter-rouge&quot;&gt;T0-T3&lt;/code&gt; as input and expect to predict &lt;code class=&quot;highlighter-rouge&quot;&gt;T4&lt;/code&gt;. For prediction of &lt;code class=&quot;highlighter-rouge&quot;&gt;T5&lt;/code&gt;, we will feed &lt;code class=&quot;highlighter-rouge&quot;&gt;T1-T4&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;T4&lt;/code&gt; comes from previous prediction.&lt;/p&gt;
+
+&lt;h4 id=&quot;results-1&quot;&gt;Results&lt;/h4&gt;
+&lt;h4 id=&quot;graphs-1&quot;&gt;Graphs&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;img/skip_autoencoder/graphs/skip_autoencoder.png&quot; alt=&quot;skip_autoencoder&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;expected-vs-generated-output-1&quot;&gt;Expected vs Generated Output&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;img/skip_autoencoder/results/v_TaiChi_g15_c01_expected_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_TaiChi_g15_c01_generated_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_expected_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_WritingOnBoard_g19_c03_generated_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_PlayingPiano_g19_c04_expected_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_PlayingPiano_g19_c04_generated_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_YoYo_g05_c01_expected_large.gif&quot; width=&quot;210&quot; /&gt;
+&lt;img src=&quot;img/skip_autoencoder/results/v_YoYo_g05_c01_generated_large.gif&quot; width=&quot;210&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;advantages-and-disadvantages-1&quot;&gt;Advantages and Disadvantages&lt;/h4&gt;
+
+&lt;p&gt;This model can work independent of shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.&lt;/p&gt;
+
+&lt;p&gt;This model becomes blur more quickly. Steady background doesn’t get blur as compared to previous model. Model blurs the part where the actual motion happens.&lt;/p&gt;
+
+&lt;h4 id=&quot;pretrained-weights-1&quot;&gt;Pretrained Weights&lt;/h4&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;multi-scale-model&quot;&gt;Multi-Scale Model&lt;/h2&gt;
+
+&lt;h3 id=&quot;architecture-2&quot;&gt;Architecture&lt;/h3&gt;
+&lt;p&gt;Multi-scale architecture model is based on idea of predicting small resolution image and resolving the predicted image as model goes deeper. This model predicts one image at a time as opposed to the seq2seq model which predicts 4-8 images simultaneously. We now discuss the input requirements as multi-scale model expects the same input in different sizes.&lt;/p&gt;
+
+&lt;p&gt;For example, given input images from &lt;code class=&quot;highlighter-rouge&quot;&gt;T0-T3&lt;/code&gt; (each having &lt;code class=&quot;highlighter-rouge&quot;&gt;H,W&lt;/code&gt; as height and width, in our case &lt;code class=&quot;highlighter-rouge&quot;&gt;64x64&lt;/code&gt;) the model would try to predict &lt;code class=&quot;highlighter-rouge&quot;&gt;T4-T7&lt;/code&gt;. Here we have 4 images with 3 channels each. As opposed to a seq2seq model where we feed images one by one as we loop through LSTM cells, here we feed all &lt;code class=&quot;highlighter-rouge&quot;&gt;4&lt;/code&gt; images in one shot. So how can we achieve this?&lt;/p&gt;
+
+&lt;p&gt;Pile up all &lt;code class=&quot;highlighter-rouge&quot;&gt;4&lt;/code&gt; images on top of each other like we do with playing cards or plates on a shelf. If we have 4 images with 3 channels each, we can think of this as 1 image having 12 channels i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;4 images x 3 channels = 12&lt;/code&gt;. Let’s call this new image as &lt;code class=&quot;highlighter-rouge&quot;&gt;I&lt;/code&gt;. Please note that &lt;code class=&quot;highlighter-rouge&quot;&gt;I&lt;/code&gt; will have the same &lt;code class=&quot;highlighter-rouge&quot;&gt;H,W&lt;/code&gt; as the original image.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/multi_scale_GAN/graphs/Multi_scale_GAN.gif&quot; alt=&quot;MultiScale_Input&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Just as we can have diffrent sizes for a shirt, like extra-small (XS), small (S), medium (M) and large (L), we can apply the same concept to our image. Currently, our &lt;code class=&quot;highlighter-rouge&quot;&gt;I&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;64x64x12&lt;/code&gt;. Let’s create different shapes as &lt;code class=&quot;highlighter-rouge&quot;&gt;I_XS&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;I_S&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;I_M&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;I_L&lt;/code&gt; having sizes &lt;code class=&quot;highlighter-rouge&quot;&gt;4x4x12&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;16x16x12&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;32x32x12&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;64x64x12&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This model can be represented in mutiple stages:
+Stage 1 takes input of &lt;code class=&quot;highlighter-rouge&quot;&gt;4x4x12&lt;/code&gt; i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;I_XS&lt;/code&gt; and passes them through convolutional layers, which produces an output of shape &lt;code class=&quot;highlighter-rouge&quot;&gt;4x4x3&lt;/code&gt; which is the first predicted image &lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Stage 2 will take input from output of Stage 1 (&lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt;) and &lt;code class=&quot;highlighter-rouge&quot;&gt;I_S&lt;/code&gt;. Here &lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt; is reshaped to shape of &lt;code class=&quot;highlighter-rouge&quot;&gt;I_S&lt;/code&gt;. The reshaped &lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt; is concatenated with &lt;code class=&quot;highlighter-rouge&quot;&gt;I_S&lt;/code&gt; according to channel axis. For instance, &lt;code class=&quot;highlighter-rouge&quot;&gt;I_S&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;16x16x12&lt;/code&gt;) is concatenated with &lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;16x16x3&lt;/code&gt;) to form &lt;code class=&quot;highlighter-rouge&quot;&gt;16x16x15&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/multi_scale_GAN/graphs/Multi_Scale_Processing.gif&quot; alt=&quot;MultiScale_Architecture&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The above process is repeated for Stages 3 and 4. Final output generated at each layer will be &lt;code class=&quot;highlighter-rouge&quot;&gt;O_XS&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;4x4x3&lt;/code&gt;),&lt;code class=&quot;highlighter-rouge&quot;&gt;O_S&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;16x16x3&lt;/code&gt;), &lt;code class=&quot;highlighter-rouge&quot;&gt;O_M&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;32x32x3&lt;/code&gt;) , &lt;code class=&quot;highlighter-rouge&quot;&gt;O_L&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;64x64x3&lt;/code&gt;) respectively.&lt;/p&gt;
+
+&lt;p&gt;The expected image is reshaped in the same way as input image i.e we will have images (&lt;code class=&quot;highlighter-rouge&quot;&gt;E_XS&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;E_S&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;E_M&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;E_L&lt;/code&gt;). Let’s the loss function be &lt;code class=&quot;highlighter-rouge&quot;&gt;L(.,.)&lt;/code&gt;. We  calculate loss as sum of loss at each predicted layer i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)&lt;/code&gt;. In our case &lt;code class=&quot;highlighter-rouge&quot;&gt;L(.,.)&lt;/code&gt; is L2 and GDL loss. L2 is pixel wise euclidean distance between predicted (P) and expected (E) image. GDL loss calculates &lt;code class=&quot;highlighter-rouge&quot;&gt;||P4 - P1| - |E4 - E1||&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s make this architecture more interesting by introducing &lt;strong&gt;Generative Adverserial Network (GAN) to this model&lt;/strong&gt;. Generator of GAN model is same as the model explained above.
+In the discriminator step, the predicted output is flattened, and passed through a fully connected layer at every stage. The final output is a single value representing the magnitude of it being real or fake. At every stage this value indicates how we are doing in terms of mimicking the real next frame. Loss calculation is now sum of &lt;code class=&quot;highlighter-rouge&quot;&gt;l2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;GDL&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Discriminator loss&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-tweaks-1&quot;&gt;Model tweaks&lt;/h3&gt;
+
+&lt;p&gt;We tried multi-scale setting without GAN model, i.e. we tried to optimize loss solely based on generator part of GAN. We realized that using only L2 loss produces blurred predictions as it seems to be converging towards the input mean.&lt;/p&gt;
+
+&lt;h3 id=&quot;training-and-testing-2&quot;&gt;Training and Testing&lt;/h3&gt;
+
+&lt;p&gt;At training time, we feed 4 frames &lt;code class=&quot;highlighter-rouge&quot;&gt;T0-T3&lt;/code&gt;, each having 4 different resolutions - &lt;code class=&quot;highlighter-rouge&quot;&gt;4x4&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;16x16&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;32x32&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;64x64&lt;/code&gt;. The model outputs the predicted frame (&lt;code class=&quot;highlighter-rouge&quot;&gt;T4&lt;/code&gt;) in the above mentioned resolutions.&lt;/p&gt;
+
+&lt;p&gt;At testing time (same as skip autoencoder) we feed 4 frames and predict one frame. For next time step we remove the oldest frame &lt;code class=&quot;highlighter-rouge&quot;&gt;T0&lt;/code&gt; and add the newly predicted frame &lt;code class=&quot;highlighter-rouge&quot;&gt;T4&lt;/code&gt; as input to the model.&lt;/p&gt;
+
+&lt;h4 id=&quot;graphs-2&quot;&gt;Graphs&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;T4&lt;/code&gt; predictions as model learns over time:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/0.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/1.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/2.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/3.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/4.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/5.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/7.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/8.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/9.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/10.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/graphs/model_running/11.png&quot; alt=&quot;MultiScale_model_running&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;results-2&quot;&gt;Results&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_WritingOnBoard_g19_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_VolleyballSpiking_g03_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_YoYo_g05_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_YoYo_g05_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CleanAndJerk_g01_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BalanceBeam_g10_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PoleVault_g24_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PoleVault_g24_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BodyWeightSquats_g13_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_MoppingFloor_g04_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingDhol_g04_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_UnevenBars_g02_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_UnevenBars_g02_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_TaiChi_g15_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_TaiChi_g15_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PushUps_g11_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PushUps_g11_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Hammering_g22_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Hammering_g22_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HorseRace_g07_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HorseRace_g07_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_GolfSwing_g20_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_GolfSwing_g20_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Lunges_g09_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Lunges_g09_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingDaf_g10_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PizzaTossing_g22_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Skijet_g05_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Skijet_g05_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HighJump_g01_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HighJump_g01_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HammerThrow_g21_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HammerThrow_g21_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingGuitar_g25_c06_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingGuitar_g25_c06_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_ParallelBars_g09_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_ParallelBars_g09_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_WallPushups_g11_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_WallPushups_g11_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_FrisbeeCatch_g05_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CricketBowling_g11_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CricketBowling_g11_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SoccerJuggling_g07_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingSitar_g21_c06_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BasketballDunk_g12_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SoccerPenalty_g10_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Skiing_g23_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Skiing_g23_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Nunchucks_g15_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Nunchucks_g15_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_JumpRope_g23_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_JumpRope_g23_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SkateBoarding_g07_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SkateBoarding_g07_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SkyDiving_g15_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SkyDiving_g15_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingViolin_g05_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingViolin_g05_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HorseRiding_g25_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HorseRiding_g25_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_TableTennisShot_g12_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PommelHorse_g13_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PommelHorse_g13_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_JavelinThrow_g09_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_JavelinThrow_g09_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_ThrowDiscus_g18_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_ThrowDiscus_g18_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Typing_g20_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Typing_g20_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CricketShot_g06_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_CricketShot_g06_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Surfing_g17_c06_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Surfing_g17_c06_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_StillRings_g21_c01_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_StillRings_g21_c01_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingCello_g24_c05_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_PlayingCello_g24_c05_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SalsaSpin_g24_c02_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Rowing_g02_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_Rowing_g02_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HulaHoop_g04_c04_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_HulaHoop_g04_c04_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BandMarching_g05_c07_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_BandMarching_g05_c07_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_expected_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;
+&lt;img src=&quot;img/multi_scale_GAN/results/v_SumoWrestling_g17_c03_generated_large.gif&quot; alt=&quot;multi_scale_gan8_results&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;advantages-and-disadvantages-2&quot;&gt;Advantages and Disadvantages&lt;/h3&gt;
+
+&lt;p&gt;Multi-scale model does pretty well in capturing motion and predicting next frames. This model is also fully based on convolution and therefore works with any shape of images at run time. As the model is trained using GAN it predicts  frames which look similar to real images.&lt;/p&gt;
+
+&lt;p&gt;This model tries to predict pixels from scratch which causes bluriness for longer sequences.&lt;/p&gt;
+
+&lt;h3 id=&quot;pretrained-weights-2&quot;&gt;Pretrained Weights&lt;/h3&gt;
+
+&lt;h2 id=&quot;evaluation&quot;&gt;Evaluation&lt;/h2&gt;
+
+&lt;p&gt;We evaluated the models on 5 different criteria as follows:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Sharpness: Edge contrast of an image.&lt;/li&gt;
+  &lt;li&gt;Peak Signal to Noise Ratio (PSNR): Measure of quality of image reconstruction.&lt;/li&gt;
+  &lt;li&gt;L2: Euclidean distance between predicted and expected frame.&lt;/li&gt;
+  &lt;li&gt;GDL: Calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.&lt;/li&gt;
+  &lt;li&gt;Total loss: Sum of L2, GDL loss (Also contains discriminator loss in case of multi-scale architecture).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It is not possible to compare the above 3 models with each other directly since the model settings are different for each of them. We now show the performance of each model based on the aforementioned evaluation critera:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Model&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;No. output frames&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Output frame size&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Sharpness&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;PSNR&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;L2 Loss&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;GDL&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Total Loss&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;seq2seq&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;64x64x3&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9.54213&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;14.7555&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;319.918&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;543.557&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;863.475&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Skip Autoencoder&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;160x240x3&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12.446&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;14.0922&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3776.72&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1589.89&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5366.61&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Multi-scale&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;160x210x3&lt;/code&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12.0636&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12.339&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4742.66&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1601.93&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6344.58&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;future-scope&quot;&gt;Future Scope&lt;/h2&gt;
+&lt;p&gt;Although, our current results are pretty reasonable given the time constraints of this project, there is lot of scope for improvement. One particular approach that we want to explore in the future is to train a network that learns to synthesize video frames by flowing pixel values from existing ones instead of hallucinating pixel values directly. 
+We expect the above approach to improve our results significantly and could also be a potential solution to overcome blurriness in our predicted frames.&lt;/p&gt;
+
+&lt;p&gt;We also plan to extend the above project to be able to make predictions on much longer frame sequences in the range of 32 to 64 frames from the 4 frames that we predict currently. Also, the UCF-101 dataset that we use for this work, contains videos across multiple domains which makes this a very difficult task. We expect our results to be much better on very specific problems like autonomous driving using single domain datasets like &lt;a href=&quot;http://www.cvlibs.net/datasets/kitti/&quot;&gt;Kitti&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary--conclusion&quot;&gt;Summary &amp;amp; Conclusion&lt;/h2&gt;
+&lt;p&gt;We presented 3 different models to predict next video frames given an input sequence of frames namely seq2seq model, autoencoder model and multi-scale architecture model. We observed that the multi scale model produces the best results in terms of both capturing the motion as well as preventing blurriness.&lt;/p&gt;
+
+&lt;p&gt;We also tried gradient discriminator loss (GDL) as our loss function instead of the general L2 loss used in existing work on this problem.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;Mathieu, Michael, Camille Couprie, and Yann LeCun ”Deep multi-scale video prediction beyond mean square error.” arXiv preprint arXiv:1511.05440 (2015).&lt;/li&gt;
+  &lt;li&gt;Vondrick, Carl, Hamed Pirsiavash, and Antonio Torralba. ”Generating videos with scene dynamics.”&lt;/li&gt;
+  &lt;li&gt;Advances In Neural Information Processing Systems 2016. S. Hochreiter and J. Schmidhuber. Long short-term memory. Neural Comput, 9(8):1735–1780, Nov. 1997&lt;/li&gt;
+  &lt;li&gt;J. Walker, A. Gupta, and M. Hebert. Dense optical flow prediction from a static image. CoRR , abs/1505.00295, 2015.&lt;/li&gt;
+  &lt;li&gt;X. Shi, Z. Chen, H. Wang, D. Yeung, W. Wong, and W. Woo. Convolutional LSTM network: A machine learning approach for precipitation nowcasting. CoRR, abs/1506.04214, 2015.&lt;/li&gt;
+  &lt;li&gt;Goodfellow, Ian, et al. ”Generative adversarial nets.” Advances in neural information processing systems 2014.&lt;/li&gt;
+  &lt;li&gt;Liu, Ziwei, et al. “Video Frame Synthesis using Deep Voxel Flow.” arXiv preprint arXiv:1702.02463 (2017).&lt;/li&gt;
+  &lt;li&gt;Soomro, Khurram, Amir Roshan Zamir, and Mubarak Shah. “UCF101: A dataset of 101 human actions classes from videos in the wild.” arXiv preprint arXiv:1212.0402 (2012).&lt;/li&gt;
+  &lt;li&gt;C. Finn, I. J. Goodfellow, and S. Levine. Unsupervised learning for physical interaction through video prediction. CoRR,
+abs/1605.07157, 2016.&lt;/li&gt;
+&lt;/ol&gt;
 
 </description>
-        <pubDate>Fri, 10 Nov 2017 05:24:39 +0000</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2017/11/10/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2017/11/10/welcome-to-jekyll.html</guid>
+        <pubDate>Tue, 21 Nov 2017 21:24:39 -0800</pubDate>
+        <link>http://localhost:4000/2017/11/22/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/11/22/welcome-to-jekyll.html</guid>
         
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
         
       </item>
     

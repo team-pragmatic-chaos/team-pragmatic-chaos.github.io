@@ -11,8 +11,8 @@
 ">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://yourdomain.com/timeline/">
-  <link rel="alternate" type="application/rss+xml" title="Team Pragmatic Chaos Blog" href="http://yourdomain.com/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/timeline/">
+  <link rel="alternate" type="application/rss+xml" title="Team Pragmatic Chaos Blog" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -42,11 +42,9 @@
           
         
           
-        
+          <a class="page-link" href="/">Bringing Photos to Life using Deep Learning</a>
           
         
-          
-          <a class="page-link" href="/research.html">Bringing Photos to Life using Deep Learning</a>
           
         
           
@@ -70,22 +68,46 @@
   </header>
 
   <div class="post-content">
-    <div class="timeline">
-  <div class="container left">
-      <div class="content">
-            <h2>2017</h2>
-                  <p>Lorem ipsum..</p>
-                      </div>
-                        </div>
-                          <div class="container right">
-                              <div class="content">
-                                    <h2>2016</h2>
-                                          <p>Lorem ipsum..</p>
-                                              </div>
-                                                </div>
-                                                </div>
-<p>&lt;/p&gt;&lt;/h&gt;
-&lt;/div&gt;</p>
+    <h2 id="setup">Setup</h2>
+
+<ul>
+  <li>AWS setup</li>
+  <li>Google Cloud setup</li>
+  <li>TensorFlow tutorial</li>
+  <li>Tensorboard tutorial</li>
+  <li>Jekyll setup</li>
+</ul>
+
+<h2 id="data-preprocessing">Data Preprocessing</h2>
+<ul>
+  <li>Dataset Exploration using IPython notebook</li>
+  <li>Image Mean subtraction</li>
+  <li>Batch generation of data</li>
+  <li>sk-videos for frame extraction</li>
+  <li>Time interval generation</li>
+  <li>Video frame analysis (minimum and maximum frame checks)</li>
+  <li>Relative file path handling of input data</li>
+  <li>Time frame with interval selection T0, T5, …, T32</li>
+</ul>
+
+<h2 id="conv-lstm-model">Conv LSTM model</h2>
+<ul>
+  <li>Vanilla Conv LSTM model creation</li>
+  <li>Output sequence of images to Video</li>
+  <li>Train and test in Tensorflow of model</li>
+  <li>Tensorboard logging of logs</li>
+  <li>Checkpoint save and restore model</li>
+  <li>Bug fixes batch data reading problem fixes</li>
+</ul>
+
+<h2 id="conv-deconv-lstm-model">Conv Deconv LSTM model</h2>
+<ul>
+  <li>Tensorboard logging of images</li>
+  <li>Validation split size decrease</li>
+  <li>Checkpoint to save and restore from tensorflow</li>
+  <li>Checks for tensorboard image and batch size</li>
+</ul>
+
 
   </div>
 
