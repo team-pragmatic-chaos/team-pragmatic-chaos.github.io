@@ -71,7 +71,7 @@ Also, the generated frames do not represent any significant motion.
 of images is typical when using L2 loss as stated in [1]. 
 
 ## Gradient Discriminator Loss 
-We use the GDL loss which calculates the difference with respect to surronding pixels to focus on local changes rather than global changes.
+We use the GDL loss which calculates the difference with respect to surrounding pixels to focus on local changes rather than global changes.
 
 ## Problems with dataset
 The dataset consists of a large number of videos where there is hardly any movement between frames. We eliminate videos in UCF-101 that have no movement.
