@@ -88,6 +88,7 @@ We use the GDL loss which calculates difference with respect to surrondings pixe
 
 <img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
 
+![gdl_loss](img/frame_selection/GDLloss.gif)
 
 ## Models
 The following section presents 3 models based on LSTM and Convolution that worked the best for our task.
@@ -513,7 +514,7 @@ We evaluated the models on 5 different criteria as follows:
 - GDL: Calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
 - Total loss: Sum of L2, GDL loss (Also contains discriminator loss in case of multi-scale architecture).
  
-It is not possible to compare the above 3 models with each other directly since the model settings are different for each of them. We now show the performance of each model based on the aforementioned evaluation critera:
+It is not possible to compare the above 3 models with each other directly since the model settings are different for each of them. We now show the performance of each model based on the aforementioned evaluation criteria:
 
 ![evaluation_results](img/frame_selection/evaluation_results_table.png)
 
