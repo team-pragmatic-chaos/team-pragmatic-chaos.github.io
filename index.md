@@ -54,7 +54,7 @@ We use the famous [UCF-101 dataset](http://crcv.ucf.edu/data/UCF101.php) for tra
 Because some of the categories in the UCF-101 dataset have very little movement, we removed such categories altogether from the dataset. 
 
 #### Preprocessing the input
-The model requires the pixel values for all of the video frames to be in the range `[-1,1]`. To achieve this, each of the video , say X, is preprocessed using the formula X = (X - 127.5) / 127.5 instead of providing the raw video as input.
+The model requires the pixel values for all of the video frames to be in the range `[-1,1]`. To achieve this, each of the videos, say X, is preprocessed using the formula X = (X - 127.5) / 127.5 instead of providing the raw video as input.
 ```python
 def image_processing(X):
     X = (X - 127.5) / 127.5
@@ -79,7 +79,7 @@ For example, if the batch contains 4 videos and each video contains 4 continuous
 Similar selection logic follows for other videos in the batch.
 
 ### Selection at an interval
-After experimenting with a few videos, we observed that picking continuos frames does not capture any significant movement in the actual video. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames. 
+After experimenting with a few videos, we observed that picking continuous frames does not capture any significant movement in the actual video. In order to overcome this, we came up with an approach of selecting video frames with a certain interval in between the selected frames rather than having continuous frames. 
 
 ![batch_gen](img/frame_selection/frame_selection_with_intervals.png)
 
@@ -88,13 +88,13 @@ Let's take the same example as above. Suppose we generate the number `1` and we 
 ## Loss Function
 We use the following loss functions in our models.
 
-### L2 Loss (pixelwise loss)
-L2 loss calculates the pixelwise difference between the predicted frame and the expected frame.
+### L2 Loss (pixel-wise loss)
+L2 loss calculates the pixel-wise difference between the predicted frame and the expected frame.
 
 ![pixelwise_loss](img/frame_selection/pixelwise_loss.gif)
 
 ### Gradient Discriminator Loss (GDL)
-We use GDL which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+We use GDL which calculates the difference with respect to surrounding pixels to focus on local changes rather than global changes.
 
 <img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
 
@@ -117,7 +117,7 @@ Every video frame is passed through Convolutional layers and converted to a feat
 The model takes in 4 frames as input and tries to predict the next 4 frames in the sequence as the output.
 
 #### Training and Testing
-During testing, the previously predicted frames is passed as input to the decoder. In contrast, at training time, we pass the actual frames of the video as input to the decoder.
+During testing, the previously predicted frames are passed as input to the decoder. In contrast, at training time, we pass the actual frames of the video as input to the decoder.
 
 In our case, we used a batch size of 16 videos with 4 frames per video. Out of these 4 frames, the first 3 frames are passed as input to the encoder while the 4th frame acts as the initial input to the decoder.
 
@@ -127,7 +127,7 @@ Here is a quick summary of what we tried along with the intuition behind them:
 
 - Teacher Forcing: We decided to remove teacher forcing from above model
 during training so that each unit sums correct teacher activations as input for the next iteration instead of only summing activations from incoming units.
-- Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions. Therefore, we increased number of Conv-Deconv layers and introduced a Batch Normalization layer.
+- Batch Normalization: After training the above model, we found that the capacity of the network was not enough to make good predictions. Therefore, we increased the number of Conv-Deconv layers and introduced a Batch Normalization layer.
 
 
 #### Results
@@ -298,7 +298,7 @@ during training so that each unit sums correct teacher activations as input for 
 #### Advantages and Disadvantages
 This seq2seq model is able to capture the features of the steady background in the video very well. 
 
-However,  seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
+However,  seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the blurriness increases with motion. Another major problem is this model cannot be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
 
 
 ### Autoencoder Model
@@ -316,7 +316,7 @@ The encoder portion of the autoencoder takes an input video frame and uses a fea
 
 At the time of training, we feed 4 frames as input and the model predicts the next frame in the sequence. 
 
-At testing time, we want to predict several video frames. In this case, we will first feed `T0-T3` as input and expect to predict `T4`. For prediction of `T5`, we will feed `T1-T4` where `T4` comes from previous prediction.   
+At testing time, we want to predict several video frames. In this case, we will first feed `T0-T3` as input and expect to predict `T4`. For prediction of `T5`, we will feed `T1-T4` where `T4` comes from the previous prediction.   
 
 #### Results
 #### Graphs
@@ -334,37 +334,37 @@ At testing time, we want to predict several video frames. In this case, we will 
 
 #### Advantages and Disadvantages
 
-This model can work independent of shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.
+This model can work independently of the shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts sharper frames than the previous model.
 
-This model becomes blur more quickly. Steady background doesn't get blur as compared to previous model. Model blurs the part where the actual motion happens.  
+This model becomes blur more quickly. The steady background does not get blur as compared to the previous model. Model blurs the part where the actual motion happens.  
 
 
 ## Multi-Scale Model
 
 ### Architecture
-Multi-scale architecture model is based on idea of predicting small resolution image and resolving the predicted image as model goes deeper. This model predicts one image at a time as opposed to the seq2seq model which predicts 4-8 images simultaneously. We now discuss the input requirements as multi-scale model expects the same input in different sizes.  
+Multi-scale architecture model is based on the idea of predicting small resolution image and resolving the predicted image as the model goes deeper. This model predicts one image at a time as opposed to the seq2seq model which predicts 4-8 images simultaneously. We now discuss the input requirements as multi-scale model expects the same input in different sizes.  
 
-For example, given input images from `T0-T3` (each having `H,W` as height and width, in our case `64x64`) the model would try to predict `T4-T7`. Here we have 4 images with 3 channels each. As opposed to a seq2seq model where we feed images one by one as we loop through LSTM cells, here we feed all `4` images in one shot. So how can we achieve this?
+For example, given input images from `T0-T3` (each having `H, W` as height and width, in our case `64x64`) the model would try to predict `T4-T7`. Here we have 4 images with 3 channels each. As opposed to a seq2seq model where we feed images one by one as we loop through LSTM cells, here we feed all `4` images in one shot. So how can we achieve this?
 
-Pile up all `4` images on top of each other like we do with playing cards or plates on a shelf. If we have 4 images with 3 channels each, we can think of this as 1 image having 12 channels i.e. `4 images x 3 channels = 12`. Let's call this new image as `I`. Please note that `I` will have the same `H,W` as the original image.
+Pile up all `4` images on top of each other like we do with playing cards or plates on a shelf. If we have 4 images with 3 channels each, we can think of this as 1 image having 12 channels i.e. `4 images x 3 channels = 12`. Let's call this new image as `I`. Please note that `I` will have the same `H, W` as the original image.
 
 ![MultiScale_Input](img/multi_scale_GAN/graphs/Multi_scale_GAN.gif)
 
-Just as we can have diffrent sizes for a shirt, like extra-small (XS), small (S), medium (M) and large (L), we can apply the same concept to our image. Currently, our `I` is `64x64x12`. Let's create different shapes as `I_XS`, `I_S`, `I_M`, `I_L` having sizes `4x4x12`, `16x16x12`, `32x32x12`, `64x64x12`.
+Just as we can have different sizes for a shirt, like extra-small (XS), small (S), medium (M) and large (L), we can apply the same concept to our image. Currently, our `I` is `64x64x12`. Let's create different shapes as `I_XS`, `I_S`, `I_M`, `I_L` having sizes `4x4x12`, `16x16x12`, `32x32x12`, `64x64x12`.
 
-This model can be represented in mutiple stages:
-Stage 1 takes input of `4x4x12` i.e. `I_XS` and passes them through convolutional layers, which produces an output of shape `4x4x3` which is the first predicted image `O_XS`.   
+This model can be represented in multiple stages:
+Stage 1 takes an input of `4x4x12` i.e. `I_XS` and passes them through convolutional layers, which produces an output of shape `4x4x3` which is the first predicted image `O_XS`.   
 
-Stage 2 will take input from output of Stage 1 (`O_XS`) and `I_S`. Here `O_XS` is reshaped to shape of `I_S`. The reshaped `O_XS` is concatenated with `I_S` according to channel axis. For instance, `I_S` (`16x16x12`) is concatenated with `O_XS` (`16x16x3`) to form `16x16x15`. 
+Stage 2 will take input from the output of Stage 1 (`O_XS`) and `I_S`. Here `O_XS` is reshaped to shape of `I_S`. The reshaped `O_XS` is concatenated with `I_S` according to the channel axis. For instance, `I_S` (`16x16x12`) is concatenated with `O_XS` (`16x16x3`) to form `16x16x15`. 
   
 ![MultiScale_Architecture](img/multi_scale_GAN/graphs/Multi_Scale_Processing.gif)
 
-The above process is repeated for Stages 3 and 4. Final output generated at each layer will be `O_XS` (`4x4x3`),`O_S` (`16x16x3`), `O_M` (`32x32x3`) , `O_L` (`64x64x3`) respectively.
+The above process is repeated for Stages 3 and 4. The final output generated at each layer will be `O_XS` (`4x4x3`), `O_S` (`16x16x3`), `O_M` (`32x32x3`), `O_L` (`64x64x3`) respectively.
 
-The expected image is reshaped in the same way as input image i.e we will have images (`E_XS`,`E_S`,`E_M`,`E_L`). Let's the loss function be `L(.,.)`. We  calculate loss as sum of loss at each predicted layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case `L(.,.)` is L2 and GDL loss. L2 is pixel wise euclidean distance between predicted \(P\) and expected (E) image. GDL loss calculates `||P4 - P1| - |E4 - E1||`
+The expected image is reshaped in the same way as input image i.e we will have images (`E_XS`, `E_S`, `E_M`, `E_L`). Let's the loss function be `L(.,.)`. We  calculate loss as sum of loss at each predicted layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case `L(.,.)` is L2 and GDL loss. L2 is pixel-wise euclidean distance between predicted \(P\) and expected (E) image. GDL loss calculates `||P4 - P1| - |E4 - E1||`
 
-Now let's make this architecture more interesting by introducing **Generative Adverserial Network (GAN) to this model**. Generator of GAN model is same as the model explained above.
-In the discriminator step, the predicted output is flattened, and passed through a fully connected layer at every stage. The final output is a single value representing the magnitude of it being real or fake. At every stage this value indicates how we are doing in terms of mimicking the real next frame. Loss calculation is now sum of `l2`, `GDL` and `Discriminator loss`.  
+Now let's make this architecture more interesting by introducing **Generative Adversarial Network (GAN) to this model**. The generator of GAN model is same as the model explained above.
+In the discriminator step, the predicted output is flattened and passed through a fully connected layer at every stage. The final output is a single value representing the magnitude of it being real or fake. At every stage, this value indicates how we are doing in terms of mimicking the real next frame. Loss calculation is now the sum of `l2`, `GDL`, and `Discriminator loss`.  
 
 ### Model tweaks
 
@@ -372,9 +372,9 @@ We tried multi-scale setting without GAN model, i.e. we tried to optimize loss s
 
 ### Training and Testing
 
-At training time, we feed 4 frames `T0-T3`, each having 4 different resolutions - `4x4`, `16x16`, `32x32` and `64x64`. The model outputs the predicted frame (`T4`) in the above mentioned resolutions.
+At training time, we feed 4 frames `T0-T3`, each having 4 different resolutions - `4x4`, `16x16`, `32x32` and `64x64`. The model outputs the predicted frame (`T4`) in the aforementioned resolutions.
 
-At testing time (same as skip autoencoder) we feed 4 frames and predict one frame. For next time step we remove the oldest frame `T0` and add the newly predicted frame `T4` as input to the model.
+At the time of testing (same as skip autoencoder), we feed 4 frames and predict one frame. For next time step, we remove the oldest frame `T0` and add the newly predicted frame `T4` as input to the model.
 
 #### Graphs
 `T4` predictions as model learns over time:
@@ -498,9 +498,9 @@ At testing time (same as skip autoencoder) we feed 4 frames and predict one fram
 
 ### Advantages and Disadvantages
 
-Multi-scale model does pretty well in capturing motion and predicting next frames. This model is also fully based on convolution and therefore works with any shape of images at run time. As the model is trained using GAN it predicts  frames which look similar to real images. 
+The multi-scale model does pretty well in capturing motion and predicting next frames. This model is also fully based on convolution and therefore works with any shape of images at runtime. As the model is trained using GAN it predicts frames which look similar to real images. 
 
-This model tries to predict pixels from scratch which causes bluriness for longer sequences.
+This model tries to predict pixels from scratch which causes blurriness for longer sequences.
 
 
 ## Evaluation
@@ -509,7 +509,7 @@ We evaluated the models on 5 different criteria as follows:
 - Sharpness: Edge contrast of an image.
 - Peak Signal to Noise Ratio (PSNR): Measure of quality of image reconstruction. 
 - L2: Euclidean distance between predicted and expected frame.
-- GDL: Calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+- GDL: Calculates difference with respect to surrounding pixels to focus on local changes rather than global changes.
 - Total loss: Sum of L2, GDL loss (Also contains discriminator loss in case of multi-scale architecture).
  
 It is not possible to compare the above 3 models with each other directly since the model settings are different for each of them. We now show the performance of each model based on the aforementioned evaluation criteria:
@@ -517,13 +517,13 @@ It is not possible to compare the above 3 models with each other directly since 
 ![evaluation_results](img/frame_selection/evaluation_results_table.png)
 
 ## Future Scope
-Although, our current results are pretty reasonable given the time constraints of this project, there is lot of scope for improvement. One particular approach that we want to explore in the future is to train a network that learns to synthesize video frames by flowing pixel values from existing ones instead of hallucinating pixel values directly. 
+Although our current results are pretty reasonable given the time constraints of this project, there is a lot of scope for improvement. One particular approach that we want to explore in the future is to train a network that learns to synthesize video frames by flowing pixel values from existing ones instead of hallucinating pixel values directly. 
 We expect the above approach to improve our results significantly and could also be a potential solution to overcome blurriness in our predicted frames.
 
 We also plan to extend the above project to be able to make predictions on much longer frame sequences in the range of 32 to 64 frames from the 4 frames that we predict currently. Also, the UCF-101 dataset that we use for this work, contains videos across multiple domains which makes this a very difficult task. We expect our results to be much better on very specific problems like autonomous driving using single domain datasets like [Kitti](http://www.cvlibs.net/datasets/kitti/).
 
 ## Summary & Conclusion
-We presented 3 different models to predict next video frames given an input sequence of frames namely seq2seq model, autoencoder model and multi-scale architecture model. We observed that the multi scale model produces the best results in terms of both capturing the motion as well as preventing blurriness.
+We presented 3 different models to predict next video frames given an input sequence of frames namely seq2seq model, autoencoder model, and multi-scale architecture model. We observed that the multi-scale model produces the best results in terms of both capturing the motion as well as preventing blurriness.
 
 We also tried gradient discriminator loss (GDL) as our loss function instead of the general L2 loss used in existing work on this problem.
 
