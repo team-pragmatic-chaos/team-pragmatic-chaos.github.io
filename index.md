@@ -8,7 +8,7 @@ Consider the problem of a self-driving car. What if, the car could predict the m
 
 Have you ever faced a situation where you're watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event which could be the crux of the entire episode? You would definitely want to throw your remote and break your TV!
 
-In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look at[link to log page].
+In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look [at] (https://team-pragmatic-chaos.github.io/timeline/).
 
 ![introduction](img/introduction/introduction.gif)
 
@@ -290,10 +290,6 @@ This seq2seq model is able to capture the features of the steady background in t
 
 However,  seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
 
-#### Pretrained Weights
-
-
-<br>
 
 ### Autoencoder Model
 
@@ -331,13 +327,6 @@ At testing time, we want to predict several video frames. In this case, we will 
 This model can work independent of shape of the frame. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.
 
 This model becomes blur more quickly. Steady background doesn't get blur as compared to previous model. Model blurs the part where the actual motion happens.  
-
-#### Pretrained Weights
-
-
-
-
-<br>
 
 
 ## Multi-Scale Model
@@ -503,7 +492,6 @@ Multi-scale model does pretty well in capturing motion and predicting next frame
 
 This model tries to predict pixels from scratch which causes bluriness for longer sequences.
 
-### Pretrained Weights
 
 ## Evaluation
 
