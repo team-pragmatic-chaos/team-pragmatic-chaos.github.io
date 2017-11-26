@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Bringing Photos to Life using Deep Learning
+title: DeepVideos - Future video frame prediction using deep learning
 date:   2017-11-22 05:24:39 +0000
 ---
 
