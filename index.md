@@ -8,7 +8,7 @@ Consider the problem of a self-driving car. What if, the car could predict the m
 
 Have you ever faced a situation where you're watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event which could be the crux of the entire episode? You would definitely want to throw your remote and break your TV!
 
-In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, this is the place to look [at] (https://team-pragmatic-chaos.github.io/timeline/).
+In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, you can find it [here](https://team-pragmatic-chaos.github.io/timeline/).
 
 ![introduction](img/introduction/introduction.gif)
 
@@ -21,6 +21,8 @@ Table of Contents
          * [Batch Generation](#batch-generation)
          * [Selection at an interval](#selection-at-an-interval)
       * [Loss Function](#loss-function)
+         * [L2 Loss (pixelwise loss)](#l2-loss-pixelwise-loss)
+         * [Gradient Discriminator Loss (GDL)](#gradient-discriminator-loss-gdl)
       * [Models](#models)
          * [Sequence to Sequence Model](#sequence-to-sequence-model)
             * [Architecture](#architecture)
@@ -84,7 +86,15 @@ After experimenting with a few videos, we observed that picking continuos frames
 Let's take the same example as above. Suppose we generate the number `1` and we are using an interval of `1` frame, then the frames `1, 3, 5, 7` are selected as input for video-1 in the current batch. 
 
 ## Loss Function
-We use the GDL loss which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
+We use the following loss functions in our models.
+
+### L2 Loss (pixelwise loss)
+L2 loss calculates the pixelwise difference between the predicted frame and the expected frame.
+
+![pixelwise_loss](img/frame_selection/pixelwise_loss.gif)
+
+### Gradient Discriminator Loss (GDL)
+We use GDL which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
 
 <img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
 
