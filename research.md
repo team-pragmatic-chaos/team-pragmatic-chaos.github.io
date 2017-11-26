@@ -12,27 +12,33 @@ In this blog, we present an approach to tackle the above problems using deep lea
 
 ![introduction](img/introduction/introduction.gif)
 
-
 Table of Contents
 =================
- * [Data Source](#data-source)
-    * [Datasets](#datasets)
-    * [Batch Generation](#batch-generation)
-    * [Selection at an interval](#selection-at-an-interval)
- * Models
-    * [Sequence to Sequence Model](#sequence-to-sequence-model)
-       * [Architecture](#architecture)
-       * [Results](#results)
-       * [Advantages and Disadvantages](#problems)
-    * [Autoencoder Model](#autoencoder-model)
-       * [Architecture](#architecture-1)
-       * [Results](#results-1)
-       * [Advantages and Disadvantages](#problems-1)
-    * [Multi-Scale Model](#multi-scale-model)
-       * [Architecture](#architecture-2)
-       * [Results](#results-2)
-       * [Advantages and Disadvantages](#problems-2)
-    * [Evaluation](#evaluation)
+
+   * [Table of Contents](#table-of-contents)
+      * [Data Preparation](#data-preparation)
+         * [Datasets](#datasets)
+         * [Batch Generation](#batch-generation)
+         * [Selection at an interval](#selection-at-an-interval)
+      * [Models](#models)
+         * [Sequence to Sequence Model](#sequence-to-sequence-model)
+            * [Architecture](#architecture)
+            * [Results](#results)
+            * [Expected vs Generated Output](#expected-vs-generated-output)
+            * [Advantages and Disadvantages](#advantages-and-disadvantages)
+          * [Autoencoder Model](#autoencoder-model)
+            * [Architecture](#architecture-1)
+            * [Results](#results-1)
+            * [Expected vs Generated Output](#expected-vs-generated-output-1)
+            * [Advantages and Disadvantages](#advantages-and-disadvantages-1)
+         * [Multi-Scale Model](#multi-scale-model)
+             * [Architecture](#architecture-2)
+             * [Results](#results-2)
+             * [Advantages and Disadvantages](#advantages-and-disadvantages-2)
+      * [Evaluation](#evaluation)
+      * [Future Scope](#future-scope)
+      * [Summary &amp; Conclusion](#summary--conclusion)
+      * [References](#references)
 
 ## Data Preparation
 
@@ -272,10 +278,9 @@ during training so that each unit sums correct teacher activations as input for 
 ![seq2seq_results](img/seq2seq/results/v_MoppingFloor_g04_c03_generated_large.gif)
 
 #### Advantages and Disadvantages
+This seq2seq model is able to capture the features of the steady background in the video very well. 
 
-This model able to capture motion of frames and color of steady background in the video.
-
-Seq2Seq model is not able to capture motion very well. Overall image becomes blur and specially become more blur where motion happens. Another major problem is this model can not be scaled for large images as it is has Conv-LSTM cells in middle of Conv and DeConv layer. Conv-LSTM cells has fixed memory and we cannot run larger sized images at test time.
+However,  seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
 
 #### Pretrained Weights
 
@@ -501,3 +506,27 @@ We evaluated the models on 5 different criteria as follows:
 - GDL: Calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
 - Total loss: Sum of L2, GDL loss (Also contains discriminator loss in case of multi-scale architecture).
  
+
+## Future Scope
+Although, our current results are pretty reasonable given the time constraints of this project, there is lot of scope for improvement. One particular approach that we want to explore in the future is to train a network that learns to synthesize video frames by flowing pixel values from existing ones instead of hallucinating pixel values directly. 
+We expect the above approach to improve our results significantly and could also be a potential solution to overcome blurriness in our predicted frames.
+
+We also plan to extend the above project to be able to make predictions on much longer frame sequences in the range of 32 to 64 frames from the 4 frames that we predict currently. Also, the UCF-101 dataset that we use for this work, contains videos across multiple domains which makes this a very difficult task. We expect our results to be much better on very specific problems like autonomous driving using single domain datasets like [Kitti](http://www.cvlibs.net/datasets/kitti/).
+
+## Summary & Conclusion
+We presented 3 different models to predict next video frames given an input sequence of frames namely seq2seq model, autoencoder model and multi-scale architecture model. We observed that the multi scale model produces the best results in terms of both capturing the motion as well as preventing blurriness.
+
+We also tried gradient discriminator loss (GDL) as our loss function instead of the general L2 loss used in existing work on this problem.
+
+## References
+1. Mathieu, Michael, Camille Couprie, and Yann LeCun ”Deep multi-scale video prediction beyond mean square error.” arXiv preprint arXiv:1511.05440 (2015).
+2. Vondrick, Carl, Hamed Pirsiavash, and Antonio Torralba. ”Generating videos with scene dynamics.”
+3. Advances In Neural Information Processing Systems 2016. S. Hochreiter and J. Schmidhuber. Long short-term memory. Neural Comput, 9(8):1735–1780, Nov. 1997
+4. J. Walker, A. Gupta, and M. Hebert. Dense optical flow prediction from a static image. CoRR , abs/1505.00295, 2015.
+5. X. Shi, Z. Chen, H. Wang, D. Yeung, W. Wong, and W. Woo. Convolutional LSTM network: A machine learning approach for precipitation nowcasting. CoRR, abs/1506.04214, 2015.
+6. Goodfellow, Ian, et al. ”Generative adversarial nets.” Advances in neural information processing systems 2014.
+7. Liu, Ziwei, et al. "Video Frame Synthesis using Deep Voxel Flow." arXiv preprint arXiv:1702.02463 (2017).
+8. Soomro, Khurram, Amir Roshan Zamir, and Mubarak Shah. "UCF101: A dataset of 101 human actions classes from videos in the wild." arXiv preprint arXiv:1212.0402 (2012).
+9.  C. Finn, I. J. Goodfellow, and S. Levine. Unsupervised learning for physical interaction through video prediction. CoRR,
+abs/1605.07157, 2016.
+
