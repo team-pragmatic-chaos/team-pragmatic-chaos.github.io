@@ -73,6 +73,7 @@ of images is typical when using L2 loss as stated in [1].
 ## Gradient Discriminator Loss 
 We use the GDL loss which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
 
+<img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
 
 ## Problems with dataset
 ## Eliminate videos in UCF-101 that have no movement
