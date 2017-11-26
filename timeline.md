@@ -73,32 +73,37 @@ of images is typical when using L2 loss as stated in [1].
 ## Gradient Discriminator Loss 
 We use the GDL loss which calculates difference with respect to surrondings pixels to focus on local changes rather than global changes.
 
-<img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
-
 ## Problems with dataset
-## Eliminate videos in UCF-101 that have no movement
+The dataset consists of a large number of videos where there is hardly any movement between frames. We eliminate videos in UCF-101 that have no movement.
 
-## Sequence to Sequence Model
+## Sequence to Sequence Model (seq2seq)
+To capture the movement between the frames we feed 4 image frames as input instead of a single static image. This is then fed into a seq2seq model to learn how the frames change with respect to time. 
+
+### Problems with seq2seq
+
+- We observe that, seq2seq is not able to capture motion very well. We observe that the predicted frames are blurred and the bluriness increases with motion. 
+- Another major problem is this model can not be scaled for large images as it has Conv-LSTM cells in between the Conv and DeConv layers. Conv-LSTM cells have fixed memory and we cannot handle large sized images during test time.
 
 ## AutoEncoder Model 
+Since we wanted a model that can work independent of shape of the frame, we tried the AutoEncoder model. It is based on Convolutional layer and therefore, at testing time, we can feed frames of different sizes as compared to training time. It also captures motion and predicts more sharper frames than previous model.
 
 ## AutoEncoder Model with Skip Connections
-
+Each of the video frames has some spatial information associated with itself. We introduced skip connections within our autoencoder model since they help in maintaining better spatial information.
 
 ### Challenges
+The results become blur more quickly. We observed that the background doesn’t get blurred which was an improvement over the seq2seq model.
 
 ## Multi-Scale Architecture
-
-## Generative Adversarial Networks (4 frame prediction)
-
-
-## Generative Adversarial Networks (8 frame prediction)
-
+To overcome the bluriness problem we wanted to try a GAN based network that could work on any image shape. We decided to try the multi-scale architecture with GDL loss as it is based on GAN in order to produce frames closer to the actual output.
+ 
+### Generative Adversarial Network (8 frame prediction)
+A GAN was trained with the above architecture and we tried predicting the next 8 frames instead of 4. 
 
 ## Benchmark and Model Evaluation
-
+We compare the loss and the final results of all the models and found that the multi scale architecture produces the best predictions. The results were compared by manual inspection of a large sample of the test data.
 
 ## Documentation and Presentation
+The last week was spent in documenting results and building this awesome blog.
 
 ## References
 1. Mathieu, Michael, Camille Couprie, and Yann LeCun. ”Deep multi-scale video prediction beyond mean square error.” arXiv preprint arXiv:1511.05440 (2015).
