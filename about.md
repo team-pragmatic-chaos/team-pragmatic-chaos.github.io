@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-# Team Pragmatic Chaos - 1
+# Team Pragmatic Chaos
 
 | [Pratik Kabara](https://www.linkedin.com/in/pratik-kabra-2a504b58/) <img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/about/kabra.jpg" width="210"> | [Vatsal Shah](https://www.linkedin.com/in/vatsalshh) <img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/about/vatsal.jpg" width="210"> |
 | ------------- | ------------- |
