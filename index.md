@@ -508,11 +508,7 @@ We evaluated the models on 5 different criteria as follows:
  
 It is not possible to compare the above 3 models with each other directly since the model settings are different for each of them. We now show the performance of each model based on the aforementioned evaluation critera:
 
-| Model            | No. output frames | Output frame size | Sharpness | PSNR    | L2 Loss | GDL     | Total Loss |
-|------------------|-------------------:|-------------------:|-----------:|---------:|---------:|---------:|------------:|
-| seq2seq          | 4                 | `64x64x3`           | 9.54213   | 14.7555 | 319.918 | 543.557 | 863.475    |
-| Skip Autoencoder | 4                 | `160x240x3`         | 12.446    | 14.0922 | 3776.72 | 1589.89 | 5366.61    |
-| Multi-scale      | 8                 | `160x210x3`         | 12.0636   | 12.339  | 4742.66 | 1601.93 | 6344.58    |
+![evaluation_results](img/frame_selection/evaluation_results_table.png)
 
 ## Future Scope
 Although, our current results are pretty reasonable given the time constraints of this project, there is lot of scope for improvement. One particular approach that we want to explore in the future is to train a network that learns to synthesize video frames by flowing pixel values from existing ones instead of hallucinating pixel values directly. 
