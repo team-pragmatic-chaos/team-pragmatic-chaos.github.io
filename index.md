@@ -361,7 +361,7 @@ Stage 2 will take input from the output of Stage 1 (`O_XS`) and `I_S`. Here `O_X
 
 The above process is repeated for Stages 3 and 4. The final output generated at each layer will be `O_XS` (`4x4x3`), `O_S` (`16x16x3`), `O_M` (`32x32x3`), `O_L` (`64x64x3`) respectively.
 
-The expected image is reshaped in the same way as input image i.e we will have images (`E_XS`, `E_S`, `E_M`, `E_L`). Let's the loss function be `L(.,.)`. We  calculate loss as sum of loss at each predicted layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case `L(.,.)` is L2 and GDL loss. L2 is pixel-wise euclidean distance between predicted \(P\) and expected (E) image. GDL loss calculates `||P4 - P1| - |E4 - E1||`
+The expected image is reshaped in the same way as input image i.e we will have images (`E_XS`, `E_S`, `E_M`, `E_L`). Let's the loss function be `L(.,.)`. We  calculate loss as sum of loss at each predicted layer i.e. `L(E_XS, O_XS) + L(E_S, O_S) + L(E_M, O_M) + L(E_L, O_L)`. In our case `L(.,.)` is L2 and GDL loss. L2 loss is the pixel-wise euclidean distance between predicted \(P\) and expected (E) image. GDL loss calculates `||P4 - P1| - |E4 - E1||`
 
 Now let's make this architecture more interesting by introducing **Generative Adversarial Network (GAN) to this model**. The generator of GAN model is same as the model explained above.
 In the discriminator step, the predicted output is flattened and passed through a fully connected layer at every stage. The final output is a single value representing the magnitude of it being real or fake. At every stage, this value indicates how we are doing in terms of mimicking the real next frame. Loss calculation is now the sum of `l2`, `GDL`, and `Discriminator loss`.  
