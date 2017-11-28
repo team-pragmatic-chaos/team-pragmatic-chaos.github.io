@@ -6,7 +6,7 @@ date:   2017-11-22 05:24:39 +0000
 
 Consider the problem of a self-driving car. What if, the car could predict the motion of objects around it using a sequence of image frames? It would definitely enhance its ability to apply brakes in case of an emergency and thus make our lives a lot safer.
 
-Have you ever faced a situation where you're watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event which could be the crux of the entire episode? You would definitely want to throw your remote and break your TV!
+Have you ever faced a situation where you're watching your favorite sport on TV and the video freezes for an instant, and you miss out on an important event ? You would definitely want to throw your remote and break your TV!
 
 In this blog, we present an approach to tackle the above problems using deep learning.  The goal of this project is to predict future video frames by learning the dynamics of a given scene. This blog post is aimed at providing a high-level summary of approaches and models that worked for us along with results. One thing which we realized is that Deep Learning is not a piece of cake. We faced a number of issues while getting the models to work. Specifically, if you are looking for what problems we faced and how we overcame them, you can find it [here](https://team-pragmatic-chaos.github.io/timeline/).
 
