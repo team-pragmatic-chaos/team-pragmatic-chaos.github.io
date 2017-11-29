@@ -96,8 +96,6 @@ L2 loss calculates the pixel-wise difference between the predicted frame and the
 ### Gradient Discriminator Loss (GDL)
 We use GDL which calculates the difference with respect to surrounding pixels to focus on local changes rather than global changes.
 
-<img src="https://raw.githubusercontent.com/team-pragmatic-chaos/team-pragmatic-chaos.github.io/master/img/frame_selection/GDL.png">
-
 ![gdl_loss](img/frame_selection/GDLloss.gif)
 
 ## Models
